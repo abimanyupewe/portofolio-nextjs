@@ -1,74 +1,105 @@
-import React from 'react';
+import React from "react";
 
-const LanguageFilter = ({ filtersLanguage, setFiltersLanguage }) => {
-    const languageOptions = ["JavaScript", "Dart", "TypeScript", "Php Native"];
-    
-    // Handle select all/none for languages
-    const allLanguagesSelected = languageOptions.every(lang => filtersLanguage.includes(lang));
-    const toggleSelectAllLanguages = () => {
-        if (allLanguagesSelected) {
-            setFiltersLanguage([]);
-        } else {
-            setFiltersLanguage([...languageOptions]);
-        }
-    };
+interface LanguageFilterProps {
+  filtersLanguage: string[];
+  setFiltersLanguage: React.Dispatch<React.SetStateAction<string[]>>;
+}
 
-    return (
-        <div className="space-y-2 p-4 bg-white rounded-lg shadow-sm border">
-            {/* Header with select all toggle */}
-            <div className="flex justify-between items-center mb-2">
-                <h3 className="font-medium text-gray-700">Filter Bahasa</h3>
-                <button 
-                    onClick={toggleSelectAllLanguages}
-                    className="text-xs text-purple-600 hover:text-purple-800"
-                >
-                    {allLanguagesSelected ? "Hapus Semua" : "Pilih Semua"}
-                </button>
-            </div>
+const LanguageFilter: React.FC<LanguageFilterProps> = ({
+  filtersLanguage,
+  setFiltersLanguage,
+}) => {
+  const languageOptions = ["JavaScript", "Dart", "TypeScript", "Php Native"];
 
-            {/* Language options */}
-            <div className="space-y-2">
-                {languageOptions.map((language) => {
-                    const isChecked = filtersLanguage.includes(language);
-                    return (
-                        <label 
-                            key={language} 
-                            className={`flex items-center p-2 rounded-md cursor-pointer transition-colors ${
-                                isChecked ? "bg-blue-50" : "hover:bg-gray-50"
-                            }`}
-                        >
-                            <input
-                                type="checkbox"
-                                checked={isChecked}
-                                onChange={() => {
-                                    setFiltersLanguage(prev => 
-                                        isChecked
-                                            ? prev.filter(item => item !== language)
-                                            : [...prev, language]
-                                    );
-                                }}
-                                className={`h-4 w-4 text-blue-600 rounded focus:ring-blue-500 ${
-                                    isChecked ? "border-blue-300" : "border-gray-300"
-                                }`}
-                            />
-                            <span className={`ml-2 text-sm ${
-                                isChecked ? "text-blue-800 font-medium" : "text-gray-700"
-                            }`}>
-                                {language}
-                            </span>
-                        </label>
+  // Handle select all/none for languages
+  const allLanguagesSelected = languageOptions.every((lang) =>
+    filtersLanguage.includes(lang)
+  );
+  const toggleSelectAllLanguages = () => {
+    if (allLanguagesSelected) {
+      setFiltersLanguage([]);
+    } else {
+      setFiltersLanguage([...languageOptions]);
+    }
+  };
+
+  return (
+    <div className="space-y-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+      {/* Header with select all toggle */}
+      <div className="flex justify-between items-center">
+        <h3 className="font-semibold text-gray-800 text-sm">Filter Language</h3>
+        <button
+          onClick={toggleSelectAllLanguages}
+          className="text-xs text-purple-600 hover:text-purple-800 font-medium transition-colors duration-200"
+        >
+          {allLanguagesSelected ? "Clear All" : "Select All"}
+        </button>
+      </div>
+
+      {/* Language options */}
+      <div className="space-y-2">
+        {languageOptions.map((language) => {
+          const isChecked = filtersLanguage.includes(language);
+          return (
+            <label
+              key={language}
+              className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200 group ${
+                isChecked
+                  ? "bg-purple-50 border border-purple-200"
+                  : "hover:bg-gray-50 border border-transparent"
+              }`}
+            >
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={() => {
+                    setFiltersLanguage((prev: string[]) =>
+                      isChecked
+                        ? prev.filter((item) => item !== language)
+                        : [...prev, language]
                     );
-                })}
-            </div>
+                  }}
+                  className="h-4 w-4 text-purple-600 bg-white border-gray-300 rounded focus:ring-purple-500 focus:ring-2 transition-colors duration-200"
+                />
+                {isChecked && (
+                  <svg
+                    className="absolute inset-0 w-4 h-4 text-purple-600 pointer-events-none"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                )}
+              </div>
+              <span
+                className={`ml-3 text-sm transition-colors duration-200 ${
+                  isChecked
+                    ? "text-purple-800 font-medium"
+                    : "text-gray-700 group-hover:text-gray-900"
+                }`}
+              >
+                {language}
+              </span>
+            </label>
+          );
+        })}
+      </div>
 
-            {/* Selected count */}
-            {filtersLanguage.length > 0 && (
-                <div className="mt-2 text-xs text-gray-500">
-                    {filtersLanguage.length} terpilih
-                </div>
-            )}
+      {/* Selected count */}
+      {filtersLanguage.length > 0 && (
+        <div className="mt-3 pt-2 border-t border-gray-100">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+            {filtersLanguage.length} selected
+          </span>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default LanguageFilter;

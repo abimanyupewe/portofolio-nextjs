@@ -1,6 +1,11 @@
 import React from "react";
 
-const TabBar = ({ activeTab, setActiveTab }) => {
+interface TabBarProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+}
+
+const TabBar: React.FC<TabBarProps> = ({ activeTab, setActiveTab }) => {
   const tabs = ["All Project", "Website", "App", "UI/UX Design", "Fullstack"];
 
   return (

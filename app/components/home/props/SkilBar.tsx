@@ -1,9 +1,14 @@
-'use client'
+"use client";
 
-import React from 'react'
+import React from "react";
 import { motion } from "framer-motion";
 
-const SkilBar = ({ name, percentage }) => {
+interface SkilBarProps {
+  name: string;
+  percentage: number;
+}
+
+const SkilBar: React.FC<SkilBarProps> = ({ name, percentage }) => {
   return (
     <div className="mb-4 font-ubuntu">
       <p className="text-sm font-semibold mb-2 text-gray-500">{name}</p>
@@ -22,7 +27,7 @@ const SkilBar = ({ name, percentage }) => {
         </motion.div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SkilBar
+export default SkilBar;

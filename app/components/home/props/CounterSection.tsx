@@ -1,9 +1,23 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const Counter = ({ end, label }) => {
+interface CounterProps {
+  end: number;
+  label: string;
+}
+
+interface CounterData {
+  end: number;
+  label: string;
+}
+
+interface CounterSectionProps {
+  counters: CounterData[];
+}
+
+const Counter: React.FC<CounterProps> = ({ end, label }) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -11,7 +25,7 @@ const Counter = ({ end, label }) => {
     const duration = 2000; // Durasi animasi dalam ms
     const intervalTime = 20;
     const step = end / (duration / intervalTime);
-    
+
     const counter = setInterval(() => {
       start += step;
       if (start >= end) {
@@ -37,10 +51,10 @@ const Counter = ({ end, label }) => {
   );
 };
 
-const CounterSection = ({ counters }) => {
+const CounterSection: React.FC<CounterSectionProps> = ({ counters }) => {
   return (
     <div className="flex justify-center gap-10 bg-gray-100 py-12 w-full">
-      {counters.map((counter, index) => (
+      {counters.map((counter: CounterData, index: number) => (
         <Counter key={index} end={counter.end} label={counter.label} />
       ))}
     </div>
