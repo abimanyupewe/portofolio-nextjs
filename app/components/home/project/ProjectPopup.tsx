@@ -1,36 +1,44 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Badge from "./ColorMapping";
-import Image from "next/image";
+import ProjectGallery from "./ProjectGallery";
 
-interface Project {
-  image: string | string[];
+// Interface matching normalized Supabase data
+export interface ProjectType {
+  id: string | number;
   title: string;
   description: string;
-  category: string | string[];
-  language: string | string[];
-  status: string | string[];
+  category: string[];
+  status: string[];
+  language: string[];
   createdAt: string;
-  previewLink: string;
+  previewLink?: string;
+  thumbnail_url?: string;
+  gallery_urls?: string[];
+  // Legacy support for local data (temporary)
+  image?: string | string[]; 
 }
 
 interface ProjectPopupProps {
-  project: Project;
+  project: ProjectType;
   onClose: () => void;
 }
 
 const ProjectPopup: React.FC<ProjectPopupProps> = ({ project, onClose }) => {
-  const [mainImage, setMainImage] = useState<string>(() => {
-    // Initialize with first image
-    if (Array.isArray(project.image)) {
-      return project.image[0] || "";
-    }
-    return project.image || "";
-  });
+  
+  // Normalize images: Combine thumbnail and gallery, or use legacy image field
+  const getImages = (): string[] => {
+      if (project.thumbnail_url) {
+          return [project.thumbnail_url, ...(project.gallery_urls || [])];
+      }
+      if (Array.isArray(project.image)) return project.image;
+      if (typeof project.image === 'string') return [project.image];
+      return [];
+  };
 
-  const images = Array.isArray(project.image) ? project.image : [project.image];
-  const hasMultipleImages = images.length > 1;
+  const images = getImages();
+
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
       {/* Close Button */}
@@ -55,163 +63,62 @@ const ProjectPopup: React.FC<ProjectPopupProps> = ({ project, onClose }) => {
       </button>
 
       {/* Modal Content */}
-      <div className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-        {/* Project Images Section */}
-        <div className="mb-6">
-          {hasMultipleImages ? (
-            /* Multiple Images Layout - Responsive */
-            <div className="flex flex-col md:flex-row gap-4">
-              {/* Main Image */}
-              <div className="flex-1">
-                <div className="relative overflow-hidden rounded-xl group">
-                  <Image
-                    src={mainImage}
-                    alt={project.title}
-                    className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
-                    width={800}
-                    height={400}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-              </div>
-
-              {/* Thumbnails - Mobile: Bottom, Desktop: Right */}
-              <div className="md:w-28 flex md:flex-col">
-                <h4 className="hidden md:block text-xs font-medium text-gray-500 mb-3">
-                  Gallery
-                </h4>
-
-                {/* Mobile Layout: Horizontal Scroll */}
-                <div className="md:hidden">
-                  <h4 className="text-xs font-medium text-gray-500 mb-2">
-                    Gallery
-                  </h4>
-                  <div className="flex gap-2 overflow-x-auto pb-2">
-                    {images.map((image: string, index: number) => (
-                      <div
-                        key={index}
-                        onClick={() => setMainImage(image)}
-                        className={`cursor-pointer rounded-lg overflow-hidden bg-gray-100 border-2 transition-all duration-200 hover:shadow-md flex-shrink-0 ${
-                          mainImage === image
-                            ? "border-purple-500 ring-2 ring-purple-200 shadow-md"
-                            : "border-gray-200 hover:border-gray-300"
-                        }`}
-                      >
-                        <Image
-                          src={image}
-                          alt={`${project.title} - Image ${index + 1}`}
-                          className="w-20 h-14 object-cover"
-                          width={80}
-                          height={56}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Desktop Layout: Vertical Stack */}
-                <div className="hidden md:flex md:flex-col gap-2 max-h-64 overflow-y-auto pr-1">
-                  {images.map((image: string, index: number) => (
-                    <div
-                      key={index}
-                      onClick={() => setMainImage(image)}
-                      className={`cursor-pointer rounded-lg overflow-hidden bg-gray-100 border-2 transition-all duration-200 hover:shadow-md flex-shrink-0 ${
-                        mainImage === image
-                          ? "border-purple-500 ring-2 ring-purple-200 shadow-md"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                    >
-                      <Image
-                        src={image}
-                        alt={`${project.title} - Image ${index + 1}`}
-                        className="w-full h-16 object-cover"
-                        width={112}
-                        height={64}
-                      />
-                    </div>
-                  ))}
-                </div>
-
-                {/* Image Counter */}
-                <div className="mt-2 text-xs text-gray-400 text-center md:text-center">
-                  {images.indexOf(mainImage) + 1} / {images.length}
-                </div>
-              </div>
-            </div>
-          ) : (
-            /* Single Image Layout */
-            <div className="relative overflow-hidden rounded-xl group">
-              <Image
-                src={mainImage}
-                alt={project.title}
-                className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
-                width={800}
-                height={400}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
-          )}
+      <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-100 dark:border-zinc-800">
+        
+        {/* Gallery Section */}
+        <div className="mb-8">
+            <ProjectGallery images={images} title={project.title} />
         </div>
 
         {/* Project Title */}
-        <h2 className="text-3xl font-bold text-gray-900 mb-3">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
           {project.title}
         </h2>
 
         {/* Project Description */}
-        <p className="text-gray-700 leading-relaxed mb-6">
+        <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
           {project.description}
         </p>
 
         {/* Project Details Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-500">Category:</span>
+            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Category:</span>
             <div className="flex flex-wrap gap-1">
-              {Array.isArray(project.category) ? (
-                project.category.map((cat, index) => (
-                  <Badge key={index} type="categoryProject" value={cat} />
-                ))
-              ) : (
-                <Badge type="categoryProject" value={project.category} />
-              )}
+              {project.category?.map((cat, index) => (
+                 <Badge key={index} type="categoryProject" value={cat} />
+              ))}
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-500">Language:</span>
+            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Language:</span>
             <div className="flex flex-wrap gap-1">
-              {Array.isArray(project.language) ? (
-                project.language.map((lang, index) => (
+               {project.language?.map((lang, index) => (
                   <Badge key={index} type="language" value={lang} />
-                ))
-              ) : (
-                <Badge type="language" value={project.language} />
-              )}
+               ))}
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-500">Status:</span>
+            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Status:</span>
             <div className="flex flex-wrap gap-1">
-              {Array.isArray(project.status) ? (
-                project.status.map((stat, index) => (
+               {project.status?.map((stat, index) => (
                   <Badge key={index} type="status" value={stat} />
-                ))
-              ) : (
-                <Badge type="status" value={project.status} />
-              )}
+               ))}
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-500">Created:</span>
-            <span className="text-sm text-gray-700">{project.createdAt}</span>
+            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Created:</span>
+            <span className="text-sm text-gray-700 dark:text-gray-300">
+                {new Date(project.createdAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </span>
           </div>
         </div>
 
         {/* Preview Button */}
-        {project.previewLink !== "None" && (
+        {project.previewLink && project.previewLink !== "None" && (
           <a
             href={project.previewLink}
             target="_blank"

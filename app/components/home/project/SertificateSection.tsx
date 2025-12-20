@@ -1,59 +1,60 @@
 import { StickyScroll } from "@/components/ui/ui/sticky-scroll-reveal";
 import React from "react";
+import Image from "next/image";
 
-type Props = {};
+interface Certificate {
+  id: string;
+  title: string;
+  issuer: string;
+  date: string;
+  credential_url: string;
+  image_url: string;
+}
 
-const SertificateSection = (props: Props) => {
-  const content = [
-    {
-      title: "Collaborative Editing",
-      description:
-        "Work together in real time with your team, clients, and stakeholders. Collaborate on documents, share ideas, and make decisions quickly. With our platform, you can streamline your workflow and increase productivity.",
-      content: (
-        <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] text-white">
-          Collaborative Editing
-        </div>
-      ),
-    },
-    {
-      title: "Real time changes",
-      description:
-        "See changes as they happen. With our platform, you can track every modification in real time. No more confusion about the latest version of your project. Say goodbye to the chaos of version control and embrace the simplicity of real-time updates.",
-      content: (
-        <div className="flex h-full w-full items-center justify-center text-white">
-          <img
-            src="/linear.webp"
-            width={300}
-            height={300}
-            className="h-full w-full object-cover"
-            alt="linear board demo"
-          />
-        </div>
-      ),
-    },
-    {
-      title: "Version control",
-      description:
-        "Experience real-time updates and never stress about version control again. Our platform ensures that you're always working on the most recent version of your project, eliminating the need for constant manual updates. Stay in the loop, keep your team aligned, and maintain the flow of your work without any interruptions.",
-      content: (
-        <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(to_bottom_right,var(--orange-500),var(--yellow-500))] text-white">
-          Version control
-        </div>
-      ),
-    },
-    {
-      title: "Running out of content",
-      description:
-        "Experience real-time updates and never stress about version control again. Our platform ensures that you're always working on the most recent version of your project, eliminating the need for constant manual updates. Stay in the loop, keep your team aligned, and maintain the flow of your work without any interruptions.",
-      content: (
-        <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] text-white">
-          Running out of content
-        </div>
-      ),
-    },
-  ];
+interface SertificateSectionProps {
+  certificates?: Certificate[];
+}
+
+const SertificateSection: React.FC<SertificateSectionProps> = ({ certificates = [] }) => {
+  // Map Supabase data to StickyScroll format
+  const content = certificates.map((cert) => ({
+    title: cert.title,
+    description: `Issuer: ${cert.issuer} | Date: ${new Date(cert.date).toLocaleDateString()}`,
+    content: (
+       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] flex items-center justify-center text-white relative overflow-hidden rounded-md group cursor-pointer"
+            onClick={() => cert.credential_url && window.open(cert.credential_url, '_blank')}
+       >
+         {cert.image_url ? (
+            <Image 
+                src={cert.image_url} 
+                alt={cert.title} 
+                fill 
+                className="object-cover"
+            />
+         ) : (
+            <div className="text-center p-4">
+                <p className="text-xl font-bold">{cert.title}</p>
+                <p className="text-sm mt-2">{cert.issuer}</p>
+                {cert.credential_url && (
+                    <span className="mt-4 inline-block text-xs bg-white/20 px-3 py-1 rounded-full">View Credential</span>
+                )}
+            </div>
+         )}
+       </div>
+    ),
+  }));
+
+  // Default content fallback is managed by checking mapped length? 
+  // StickyScroll might need at least 1 item or it might crash/be empty.
+  // We'll trust that if empty array is passed, StickyScroll handles it or renders nothing.
+
+  if (!certificates || certificates.length === 0) {
+      return null; // Or return a default static section similar to original
+  }
+
   return (
-    <div className="w-full py-4">
+    <div className="w-full py-4 bg-white dark:bg-black transition-colors duration-300">
+       <h2 className="text-3xl font-bold text-center mb-10 text-gray-900 dark:text-white">Certificates</h2>
       <StickyScroll content={content} />
     </div>
   );

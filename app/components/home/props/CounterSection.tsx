@@ -46,14 +46,14 @@ const Counter: React.FC<CounterProps> = ({ end, label }) => {
       >
         {count}+
       </motion.h2>
-      <p className="text-lg text-gray-600 font-poppins">{label}</p>
+      <p className="text-lg text-gray-600 dark:text-gray-400 font-poppins">{label}</p>
     </div>
   );
 };
 
 const CounterSection: React.FC<CounterSectionProps> = ({ counters }) => {
   return (
-    <div className="flex justify-center gap-10 bg-gray-100 py-12 w-full">
+    <div className="flex justify-center gap-10 bg-gray-100 dark:bg-zinc-900/50 py-12 w-full transition-colors">
       {counters.map((counter: CounterData, index: number) => (
         <Counter key={index} end={counter.end} label={counter.label} />
       ))}

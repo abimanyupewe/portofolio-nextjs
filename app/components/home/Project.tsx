@@ -1,12 +1,12 @@
+"use client";
+
 import React, { useState, useMemo } from "react";
 import TabBar from "./project/TabBar";
 import ProjectCard from "./project/ProjectCard";
-import ProjectPopup from "./project/ProjectPopup";
+import ProjectPopup, { ProjectType } from "./project/ProjectPopup"; // Import shared type
 import FilterCheckbox from "./project/FilterCheckbox";
-import { dataProjects } from "@/assets/data/project/dataProject.js";
 import Title from "./props/Title";
 import LanguageFilter from "./project/LanguageFilter";
-import { assets } from "@/assets/assets.js";
 import Image from "next/image";
 import {
   Pagination,
@@ -18,19 +18,11 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-interface ProjectType {
-  id: number;
-  image: any;
-  title: string;
-  description: string;
-  status: string | string[];
-  language: string | string[];
-  previewLink: string;
-  createdAt: string;
-  category: string | string[];
+interface ProjectProps {
+  initialProjects: ProjectType[];
 }
 
-const Project: React.FC = () => {
+const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
   const [activeTab, setActiveTab] = useState<string>("All Project");
   const [selectedProject, setSelectedProject] = useState<ProjectType | null>(
     null
@@ -45,7 +37,10 @@ const Project: React.FC = () => {
 
   // Enhanced filtering function
   const filteredProjects = useMemo(() => {
-    return dataProjects.filter((project: any) => {
+    // If no projects, return empty
+    if (!initialProjects) return [];
+
+    return initialProjects.filter((project) => {
       // Filter by category tab
       if (activeTab !== "All Project") {
         if (Array.isArray(project.category)) {
@@ -57,37 +52,31 @@ const Project: React.FC = () => {
 
       // Filter by status (supports array of statuses in project)
       if (filters.length > 0) {
-        // If project.status is array, check if any matches
         if (Array.isArray(project.status)) {
-          if (!project.status.some((s: string) => filters.includes(s)))
+          if (!project.status.some((s) => filters.includes(s)))
             return false;
-        }
-        // If project.status is string, check direct inclusion
-        else if (!filters.includes(project.status)) {
+        } else if (!filters.includes(project.status as any)) {
           return false;
         }
       }
 
       // Filter by language (supports array or string languages in project)
       if (filtersLanguage.length > 0) {
-        // If project.language is array, check if any matches
         if (Array.isArray(project.language)) {
           if (
-            !project.language.some((lang: string) =>
+            !project.language.some((lang) =>
               filtersLanguage.includes(lang)
             )
           )
             return false;
-        }
-        // If project.language is string, check direct inclusion
-        else if (!filtersLanguage.includes(project.language)) {
+        } else if (!filtersLanguage.includes(project.language as any)) {
           return false;
         }
       }
 
       return true;
     });
-  }, [activeTab, filters, filtersLanguage]);
+  }, [activeTab, filters, filtersLanguage, initialProjects]);
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
@@ -107,26 +96,27 @@ const Project: React.FC = () => {
     document.getElementById("project-grid")?.scrollIntoView({
       behavior: "smooth",
       block: "start",
+      inline: "nearest" // changed to nearest to avoid drastic jumps
     });
   };
 
   return (
     <section
       id="project"
-      className="min-h-screen py-16 lg:py-24 mb-24 lg:mb-32"
+      className="min-h-screen py-16 lg:py-24 mb-24 lg:mb-32 bg-white dark:bg-black transition-colors duration-300"
     >
       {/* Header Section */}
       <div className="flex justify-center flex-col items-center mb-12">
         <Title text1={"MY"} text2={"PROJECTS"} />
 
         {/* Projects Count */}
-        <p className="text-gray-600 mt-4">
+        <p className="text-gray-600 dark:text-gray-400 mt-4">
           Showing {filteredProjects.length} project
           {filteredProjects.length !== 1 ? "s" : ""}
           {filteredProjects.length > itemsPerPage && (
             <span>
               {" "}
-              - Page {currentPage} of {totalPages}
+              - Page ({currentPage} of {totalPages})
             </span>
           )}
         </p>
@@ -151,7 +141,9 @@ const Project: React.FC = () => {
           </svg>
           {isSidebarOpen ? "Hide Filters" : "Show Filters"}
           <Image
-            src={assets.chevron_right}
+            src="/icons/chevron_right.png"
+            width={16}
+            height={16}
             alt=""
             className={`w-4 h-4 transition-transform duration-300 ${
               isSidebarOpen ? "rotate-90" : ""
@@ -172,14 +164,14 @@ const Project: React.FC = () => {
         <div className="flex gap-2">
           {/* Sidebar - Filters */}
           <aside
-            className={`fixed md:sticky top-0 left-0 w-64 h-screen md:h-auto bg-white/95 md:bg-white backdrop-blur-sm md:backdrop-blur-none p-2 space-y-6 overflow-y-auto transform ${
+            className={`fixed md:sticky top-0 left-0 w-64 h-screen md:h-auto bg-white/95 dark:bg-zinc-900/95 md:bg-white md:dark:bg-zinc-900 backdrop-blur-sm md:backdrop-blur-none p-4 space-y-6 overflow-y-auto transform ${
               isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-            } md:translate-x-0 transition-all duration-300 ease-out z-50 md:z-auto  rounded-2xl border border-gray-100`}
+            } md:translate-x-0 transition-all duration-300 ease-out z-50 md:z-auto  rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm`}
           >
             {/* Close Button - Mobile Only */}
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className="md:hidden absolute top-4 right-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center text-gray-600 transition-colors duration-200"
+              className="md:hidden absolute top-4 right-4 w-8 h-8 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 transition-colors duration-200"
             >
               <svg
                 className="w-5 h-5"
@@ -208,13 +200,13 @@ const Project: React.FC = () => {
 
           {/* Main Content Area */}
           <main className="flex-1 min-h-[800px]">
-            <div className="bg-white rounded-2xl border border-gray-100 p-2 h-full flex flex-col">
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-100 dark:border-zinc-800 p-2 h-full flex flex-col">
               {filteredProjects.length > 0 ? (
                 <>
                   {/* Projects Grid */}
                   <div id="project-grid" className="flex-1 overflow-y-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 p-4">
-                      {currentProjects.map((project: any) => (
+                      {currentProjects.map((project) => (
                         <ProjectCard
                           key={project.id}
                           project={project}
@@ -226,7 +218,7 @@ const Project: React.FC = () => {
 
                   {/* Pagination */}
                   {totalPages > 1 && (
-                    <div className="border-t border-gray-100 pt-6 pb-2">
+                    <div className="border-t border-gray-100 dark:border-zinc-800 pt-6 pb-2">
                       <Pagination>
                         <PaginationContent>
                           <PaginationItem>
@@ -251,27 +243,25 @@ const Project: React.FC = () => {
                             { length: totalPages },
                             (_, i) => i + 1
                           ).map((page) => {
-                            // Show first page, last page, current page, and pages around current
-                            const showPage =
-                              page === 1 ||
-                              page === totalPages ||
-                              (page >= currentPage - 1 &&
-                                page <= currentPage + 1);
+                             const showPage =
+                               page === 1 ||
+                               page === totalPages ||
+                               (page >= currentPage - 1 &&
+                                 page <= currentPage + 1);
 
-                            if (!showPage) {
-                              // Show ellipsis
-                              if (
-                                page === currentPage - 2 ||
-                                page === currentPage + 2
-                              ) {
-                                return (
-                                  <PaginationItem key={page}>
-                                    <PaginationEllipsis />
-                                  </PaginationItem>
-                                );
-                              }
-                              return null;
-                            }
+                             if (!showPage) {
+                               if (
+                                 page === currentPage - 2 ||
+                                 page === currentPage + 2
+                               ) {
+                                  return (
+                                    <PaginationItem key={page}>
+                                      <PaginationEllipsis />
+                                    </PaginationItem>
+                                  );
+                               }
+                               return null;
+                             }
 
                             return (
                               <PaginationItem key={page}>
@@ -310,7 +300,7 @@ const Project: React.FC = () => {
                       </Pagination>
 
                       {/* Pagination Info */}
-                      <div className="text-center mt-4 text-sm text-gray-600">
+                      <div className="text-center mt-4 text-sm text-gray-600 dark:text-gray-400">
                         Showing {startIndex + 1}-
                         {Math.min(endIndex, filteredProjects.length)} of{" "}
                         {filteredProjects.length} projects
@@ -320,7 +310,8 @@ const Project: React.FC = () => {
                 </>
               ) : (
                 <div className="flex flex-col items-center justify-center h-full text-center">
-                  <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                   {/* Empty State */}
+                  <div className="w-24 h-24 bg-gray-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mb-6">
                     <svg
                       className="w-12 h-12 text-gray-400"
                       fill="none"
@@ -335,10 +326,10 @@ const Project: React.FC = () => {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                     No projects found
                   </h3>
-                  <p className="text-gray-500 mb-4">
+                  <p className="text-gray-500 dark:text-gray-400 mb-4">
                     Try adjusting your filters to see more results
                   </p>
                   <button

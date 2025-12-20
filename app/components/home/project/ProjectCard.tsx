@@ -1,56 +1,66 @@
 import React from "react";
 import Badge from "./ColorMapping";
 import Image from "next/image";
-
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  image: string[];
-  category: string;
-  language: string;
-  status: string;
-  createdAt: string;
-}
+import { ProjectType } from "./ProjectPopup"; // Import shared type if possible, or redefine
 
 interface ProjectCardProps {
-  project: Project;
+  project: ProjectType;
   onClick: () => void;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
+  // Determine display image
+  const displayImage = project.thumbnail_url 
+      ? project.thumbnail_url 
+      : (Array.isArray(project.image) ? project.image[0] : project.image);
+
   return (
     <div
       onClick={onClick}
-      className="cursor-pointer bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:border-purple-100 transition-all duration-300 group"
+      className="cursor-pointer bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800 overflow-hidden hover:shadow-md hover:border-purple-100 dark:hover:border-purple-900 transition-all duration-300 group"
     >
-      <div className="overflow-hidden">
-        <Image
-          src={project.image[0]}
-          alt={project.title}
-          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-        />
+      <div className="relative h-48 overflow-hidden">
+        {displayImage ? (
+           <Image
+            src={displayImage}
+            alt={project.title}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+           />
+        ) : (
+            <div className="w-full h-full bg-gray-200 dark:bg-zinc-800 flex items-center justify-center">
+                <span className="text-gray-400">No Image</span>
+            </div>
+        )}
       </div>
       <div className="p-5">
-        <h3 className="font-semibold text-lg text-gray-900 mb-2">
+        <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-2">
           {project.title}
         </h3>
-        <p className="line-clamp-2 text-gray-600 text-sm mb-3">
+        <p className="line-clamp-2 text-gray-600 dark:text-gray-400 text-sm mb-3">
           {project.description}
         </p>
         <div className="flex items-center gap-2 mb-3">
           {/* Badge untuk categoryProject */}
-          <Badge type="categoryProject" value={project.category} />
-          {/* Badge untuk language */}
-          <Badge type="language" value={project.language} />
-        </div>
-        {/* Badge untuk status */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500">Status:</span>
-            <Badge type="status" value={project.status} />
+          <div className="flex flex-wrap gap-1">
+             {project.category?.slice(0, 2).map((cat, i) => (
+               <Badge key={i} type="categoryProject" value={cat} />
+             ))}
+             {project.category.length > 2 && <span className="text-xs text-gray-400">+{project.category.length - 2}</span>}
           </div>
-          <p className="text-xs text-gray-500">{project.createdAt}</p>
+        </div>
+        
+        <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center gap-2">
+            <div className="flex flex-wrap gap-1">
+                 {project.status?.slice(0, 1).map((stat, i) => (
+                    <Badge key={i} type="status" value={stat} />
+                 ))}
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {new Date(project.createdAt).toLocaleDateString()}
+          </p>
         </div>
       </div>
     </div>

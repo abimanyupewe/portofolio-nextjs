@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import { assets } from "@/assets/assets";
 import Image from "next/image";
 import {
   NavigationMenu,
@@ -14,6 +13,7 @@ import {
   NavigationMenuTrigger,
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
+import { ModeToggle } from "./mode-toggle";
 
 type Props = {};
 
@@ -84,7 +84,7 @@ const Navbar = (props: Props) => {
   return (
     <header
       className={`flex z-30 md:z-50 fixed top-0 items-center justify-between py-5 font-medium w-full left-0 lg:px-24 px-8 transition-all duration-300 ${
-        scrolled ? "bg-white shadow-md py-8" : "bg-transparent"
+        scrolled ? "bg-white dark:bg-zinc-900/80 dark:backdrop-blur-md shadow-md py-8" : "bg-transparent"
       }`}
     >
       <Link href="/">
@@ -94,94 +94,176 @@ const Navbar = (props: Props) => {
       {/* Menu Desktop */}
       <NavigationMenu viewport={false} className="hidden md:flex">
         <NavigationMenuList>
+          {/* 1. HOME */}
           <NavigationMenuLink asChild>
-            <Link href="#home">Home</Link>
+            <Link
+              href="/"
+              className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white dark:bg-zinc-900 px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-gray-100 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50"
+            >
+              Home
+            </Link>
           </NavigationMenuLink>
+
+          {/* 2. PROJECT (Dropdown) */}
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Project</NavigationMenuTrigger>
+            <NavigationMenuTrigger className="bg-transparent">
+              Project
+            </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[300px] gap-4">
+              <ul className="grid w-[300px] gap-4 p-4 md:w-[400px] md:grid-cols-2 lg:w-[500px]">
+                <li className="row-span-3">
+                  <NavigationMenuLink asChild>
+                    <a
+                      className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-purple-500/10 to-purple-500/20 dark:from-purple-900/20 dark:to-purple-900/40 p-6 no-underline outline-none focus:shadow-md"
+                      href="/#project"
+                    >
+                      <div className="mb-2 mt-4 text-lg font-medium text-purple-600 dark:text-purple-400">
+                        Featured Projects
+                      </div>
+                      <p className="text-sm leading-tight text-gray-600 dark:text-gray-300">
+                        Explore my latest work in web and app development.
+                      </p>
+                    </a>
+                  </NavigationMenuLink>
+                </li>
                 <li>
                   <NavigationMenuLink asChild>
-                    <Link href="#">
-                      <div className="font-medium">Web Developer</div>
-                      <div className="text-muted-foreground">
-                        Browse all components in the library.
+                    <Link
+                      href="/#project"
+                      className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100 dark:hover:bg-zinc-800"
+                    >
+                      <div className="text-sm font-medium leading-none">
+                        All Projects
                       </div>
+                      <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400">
+                        Browse the complete portfolio
+                      </p>
                     </Link>
                   </NavigationMenuLink>
-                  <NavigationMenuLink asChild>
-                    <Link href="#">
-                      <div className="font-medium">Documentation</div>
-                      <div className="text-muted-foreground">
-                        Learn how to use the library.
+                </li>
+                <li>
+                   <NavigationMenuLink asChild>
+                    <Link
+                      href="/#skills"
+                      className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100 dark:hover:bg-zinc-800"
+                    >
+                      <div className="text-sm font-medium leading-none">
+                        Tech Stack
                       </div>
-                    </Link>
-                  </NavigationMenuLink>
-                  <NavigationMenuLink asChild>
-                    <Link href="#">
-                      <div className="font-medium">Blog</div>
-                      <div className="text-muted-foreground">
-                        Read our latest blog posts.
-                      </div>
+                      <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400">
+                         Skills & Technologies
+                      </p>
                     </Link>
                   </NavigationMenuLink>
                 </li>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
+
+          {/* 3. ABOUT (Dropdown) */}
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Simple</NavigationMenuTrigger>
+            <NavigationMenuTrigger className="bg-transparent">
+              About
+            </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[200px] gap-4">
-                <li>
+              <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                <li className="row-span-3">
                   <NavigationMenuLink asChild>
-                    <Link href="#">Components</Link>
-                  </NavigationMenuLink>
-                  <NavigationMenuLink asChild>
-                    <Link href="#">Documentation</Link>
-                  </NavigationMenuLink>
-                  <NavigationMenuLink asChild>
-                    <Link href="#">Blocks</Link>
+                    <a
+                      className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-blue-500/10 to-blue-500/20 dark:from-blue-900/20 dark:to-blue-900/40 p-6 no-underline outline-none focus:shadow-md"
+                      href="/about"
+                    >
+                      <div className="mb-2 mt-4 text-lg font-medium text-blue-600 dark:text-blue-400">
+                         Profile
+                      </div>
+                      <p className="text-sm leading-tight text-gray-600 dark:text-gray-300">
+                        Get to know me, my background, and what I do.
+                      </p>
+                    </a>
                   </NavigationMenuLink>
                 </li>
+                <li>
+                  <NavigationMenuLink asChild>
+                    <Link
+                        href="/#experience"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100 dark:hover:bg-zinc-800"
+                    >
+                        <div className="text-sm font-medium leading-none">Experience</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400">
+                            My professional journey
+                        </p>
+                    </Link>
+                  </NavigationMenuLink>
+                 </li>
+                 <li>
+                   <NavigationMenuLink asChild>
+                    <Link
+                        href="/#certificates"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100 dark:hover:bg-zinc-800"
+                    >
+                        <div className="text-sm font-medium leading-none">Certificates</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400">
+                            Credentials & Achievements
+                        </p>
+                    </Link>
+                   </NavigationMenuLink>
+                 </li>
+                 <li>
+                   <NavigationMenuLink asChild>
+                    <Link
+                        href="/contact"
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100 dark:hover:bg-zinc-800"
+                    >
+                        <div className="text-sm font-medium leading-none">Contact</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-gray-500 dark:text-gray-400">
+                            Let's get in touch
+                        </p>
+                    </Link>
+                   </NavigationMenuLink>
+                 </li>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
+
         </NavigationMenuList>
       </NavigationMenu>
 
       {/* Tombol Menu Mobile */}
-      <div className="flex items-center gap-6">
-        {/* <img src={assets.search_icon} className='w-5 cursor-pointer' alt="" /> */}
+      <div className="flex items-center gap-4">
+        <ModeToggle />
+        {/* <img src="/icons/search_icon.png" className='w-5 cursor-pointer' alt="" /> */}
         <Image
           onClick={() => setVisible(true)}
-          src={assets.menu_icon}
-          className="w-5 cursor-pointer sm:hidden"
+          src="/icons/menu_icon.png"
+          width={20}
+          height={20}
+          className="w-5 cursor-pointer md:hidden"
           alt=""
         />
       </div>
 
       {/* Sidebar Menu Mobile */}
       <div
-        className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-500 overflow-hidden ease-in ${
+        className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-zinc-900 transition-all duration-500 overflow-hidden ease-in ${
           visible ? "h-full" : "h-0"
         }`}
       >
-        <div className="flex flex-col text-gray-600 ">
+        <div className="flex flex-col text-gray-600 dark:text-gray-300 p-6">
           <div
             onClick={() => setVisible(false)}
-            className="flex items-center gap-4 p-3 cursor-pointer"
+            className="flex items-center gap-4 p-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg mb-4"
           >
             <Image
-              src={assets.dropdown_icon}
-              className="h-4 rotate-180"
+              src="/icons/dropdown_icon.png"
+              width={16}
+              height={16}
+              className="h-4 w-auto rotate-180" // w-auto needed for retain aspect ratio if only height specified? better specify both
               alt=""
             />
             <p className="hover:underline">Back</p>
           </div>
           <Link
-            className="py-2 px-6 border-b"
+            className="py-3 px-6 border-b border-gray-100 dark:border-zinc-800 hover:text-blue-500"
             onClick={() => setVisible(false)}
             href="/"
           >
@@ -199,7 +281,9 @@ const Navbar = (props: Props) => {
             >
               <p>Collection</p>
               <Image
-                src={assets.arrow_drop_down}
+                src="/icons/arrow_drop_down.png"
+                width={20}
+                height={20}
                 alt="Dropdown Arrow"
                 className={`w-5 transition-transform duration-300 ${
                   isRotatedMobile ? "rotate-180" : "rotate-0"
@@ -211,7 +295,7 @@ const Navbar = (props: Props) => {
               <div className="transition-all duration-300">
                 <Link
                   href="/#skills" // ID section tujuan
-                  className="block pl-8 py-2 text-gray-700 hover:bg-gray-100"
+                  className="block pl-8 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800"
                   onClick={() => {
                     setIsCollectionMobileOpen(false);
                     setIsRotatedMobile(false); // Reset rotasi ikon
@@ -222,7 +306,7 @@ const Navbar = (props: Props) => {
                 </Link>
                 <Link
                   href="/#project"
-                  className="block pl-8 py-2 text-gray-700 hover:bg-gray-100"
+                  className="block pl-8 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800"
                   onClick={() => {
                     setIsCollectionMobileOpen(false);
                     setIsRotatedMobile(false); // Reset rotasi ikon
