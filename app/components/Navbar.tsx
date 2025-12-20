@@ -14,6 +14,7 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { ModeToggle } from "./mode-toggle";
+import { Menu } from "lucide-react";
 
 type Props = {};
 
@@ -232,13 +233,9 @@ const Navbar = (props: Props) => {
       <div className="flex items-center gap-4">
         <ModeToggle />
         {/* <img src="/icons/search_icon.png" className='w-5 cursor-pointer' alt="" /> */}
-        <Image
+        <Menu
           onClick={() => setVisible(true)}
-          src="/icons/menu_icon.png"
-          width={20}
-          height={20}
           className="w-5 cursor-pointer md:hidden"
-          alt=""
         />
       </div>
 

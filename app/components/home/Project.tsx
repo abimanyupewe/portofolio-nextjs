@@ -17,6 +17,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { ChevronRight } from "lucide-react";
 
 interface ProjectProps {
   initialProjects: ProjectType[];
@@ -140,11 +141,7 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
             />
           </svg>
           {isSidebarOpen ? "Hide Filters" : "Show Filters"}
-          <Image
-            src="/icons/chevron_right.png"
-            width={16}
-            height={16}
-            alt=""
+          <ChevronRight
             className={`w-4 h-4 transition-transform duration-300 ${
               isSidebarOpen ? "rotate-90" : ""
             }`}
