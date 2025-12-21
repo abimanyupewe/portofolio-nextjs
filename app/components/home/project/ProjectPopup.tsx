@@ -13,6 +13,7 @@ export interface ProjectType {
   status: string[];
   language: string[];
   createdAt: string;
+  created_at?: string; // Supabase field
   previewLink?: string;
   thumbnail_url?: string;
   gallery_urls?: string[];
@@ -112,7 +113,15 @@ const ProjectPopup: React.FC<ProjectPopupProps> = ({ project, onClose }) => {
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Created:</span>
             <span className="text-sm text-gray-700 dark:text-gray-300">
-                {new Date(project.createdAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+                {(() => {
+                    const dateString = project.created_at || project.createdAt;
+                    const date = dateString ? new Date(dateString) : new Date();
+                    return isNaN(date.getTime()) ? "Just now" : date.toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric"
+                    });
+                })()}
             </span>
           </div>
         </div>
