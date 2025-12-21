@@ -24,6 +24,7 @@ const SkilsSection: React.FC<SkilsSectionProps> = ({ skills = [] }) => {
      { name: "Tailwind CSS", percentage: 85 },
      { name: "React", percentage: 80 },
      { name: "Next.js", percentage: 75 },
+     {name: "Flutter", percentage: 60}
   ];
   
   const defaultLanguages = [

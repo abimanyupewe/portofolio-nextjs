@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import ImageUpload from "@/app/components/admin/ImageUpload";
 import TagInput from "@/app/components/admin/TagInput"; // We might need a stricter Skill input, but TagInput is okay for basic strings
-import { Loader2, Plus, Trash2 } from "lucide-react";
+import { Loader2, Plus, Trash2, Pencil, X } from "lucide-react";
 
 // Types
 interface Profile {
@@ -35,10 +35,11 @@ export default function ProfileSkillsPage() {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [taglines, setTaglines] = useState<string[]>([]);
   
-  // New Skill State
-  const [newSkillName, setNewSkillName] = useState("");
-  const [newSkillCategory, setNewSkillCategory] = useState("Framework");
-  const [newSkillPercentage, setNewSkillPercentage] = useState(50);
+  // New/Edit Skill State
+  const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
+  const [skillName, setSkillName] = useState("");
+  const [skillCategory, setSkillCategory] = useState("Framework");
+  const [skillPercentage, setSkillPercentage] = useState(50);
 
   useEffect(() => {
     fetchData();
@@ -76,9 +77,8 @@ export default function ProfileSkillsPage() {
            bio,
            avatar_url: avatarUrl,
            taglines,
-           updated_at: new Date().toISOString(),
+           // updated_at removed to fix schema error
        };
-       
        if (profile?.id) {
            const { error } = await supabase.from("profile").update(updates).eq("id", profile.id);
            if (error) throw error;
@@ -96,22 +96,51 @@ export default function ProfileSkillsPage() {
     }
   };
 
-  const handleAddSkill = async () => {
-      if (!newSkillName) return;
+  const handleSaveSkill = async () => {
+      if (!skillName) return;
+
       try {
-          const { error } = await supabase.from("skills").insert([{
-              name: newSkillName,
-              category: newSkillCategory,
-              percentage: newSkillPercentage
-          }]);
-          if (error) throw error;
+          if (editingSkill?.id) {
+              // UPDATE
+              const { error } = await supabase.from("skills").update({
+                  name: skillName,
+                  category: skillCategory,
+                  percentage: skillPercentage
+              }).eq("id", editingSkill.id);
+              
+              if (error) throw error;
+              alert("Skill updated!");
+          } else {
+              // CREATE
+              const { error } = await supabase.from("skills").insert([{
+                  name: skillName,
+                  category: skillCategory,
+                  percentage: skillPercentage
+              }]);
+              
+              if (error) throw error;
+              // alert("Skill added!");
+          }
           
-          setNewSkillName("");
-          setNewSkillPercentage(50);
-          fetchData(); // refresh list
+          resetSkillForm();
+          fetchData(); 
       } catch (error: any) {
-           alert("Error adding skill: " + error.message);
+           alert("Error saving skill: " + error.message);
       }
+  };
+
+  const handleEditSkill = (skill: Skill) => {
+      setEditingSkill(skill);
+      setSkillName(skill.name);
+      setSkillCategory(skill.category);
+      setSkillPercentage(skill.percentage);
+  };
+
+  const resetSkillForm = () => {
+      setEditingSkill(null);
+      setSkillName("");
+      setSkillCategory("Framework");
+      setSkillPercentage(50);
   };
 
   const handleDeleteSkill = async (id: string) => {
@@ -195,22 +224,22 @@ export default function ProfileSkillsPage() {
         </h2>
         
         {/* Add Skill Form */}
-        <div className="flex flex-wrap items-end gap-4 p-4 bg-gray-50 dark:bg-zinc-800/30 rounded-lg">
+        <div className="flex flex-wrap items-end gap-4 p-4 bg-gray-50 dark:bg-zinc-800/30 rounded-lg border border-gray-100 dark:border-zinc-800">
              <div className="flex-1 min-w-[200px] space-y-1">
                  <label className="text-xs font-medium text-gray-500">Skill Name</label>
                  <input 
                     type="text" 
                     placeholder="e.g. Next.js"
-                    value={newSkillName}
-                    onChange={(e) => setNewSkillName(e.target.value)}
+                    value={skillName}
+                    onChange={(e) => setSkillName(e.target.value)}
                     className="w-full px-3 py-2 rounded-md border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900"
                  />
              </div>
              <div className="w-[180px] space-y-1">
                  <label className="text-xs font-medium text-gray-500">Category</label>
                  <select 
-                    value={newSkillCategory}
-                    onChange={(e) => setNewSkillCategory(e.target.value)}
+                    value={skillCategory}
+                    onChange={(e) => setSkillCategory(e.target.value)}
                     className="w-full px-3 py-2 rounded-md border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900"
                  >
                      <option value="Framework">Framework / Tool</option>
@@ -223,18 +252,30 @@ export default function ProfileSkillsPage() {
                  <input 
                     type="number" 
                     min="1" max="100"
-                    value={newSkillPercentage}
-                    onChange={(e) => setNewSkillPercentage(parseInt(e.target.value))}
+                    value={skillPercentage}
+                    onChange={(e) => setSkillPercentage(parseInt(e.target.value))}
                     className="w-full px-3 py-2 rounded-md border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900"
                  />
              </div>
-             <button 
-                onClick={handleAddSkill}
-                className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-md h-[42px] w-[42px] flex items-center justify-center transition-colors"
-                title="Add Skill"
-             >
-                 <Plus size={20} />
-             </button>
+             
+             <div className="flex gap-2">
+                 {editingSkill && (
+                    <button 
+                        onClick={resetSkillForm}
+                        className="bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-md h-[42px] w-[42px] flex items-center justify-center transition-colors"
+                        title="Cancel Edit"
+                    >
+                        <X size={20} />
+                    </button>
+                 )}
+                 <button 
+                    onClick={handleSaveSkill}
+                    className={`${editingSkill ? 'bg-orange-500 hover:bg-orange-600' : 'bg-green-600 hover:bg-green-700'} text-white p-2 rounded-md h-[42px] w-[42px] flex items-center justify-center transition-colors`}
+                    title={editingSkill ? "Update Skill" : "Add Skill"}
+                 >
+                     {editingSkill ? <Pencil size={18} /> : <Plus size={20} />}
+                 </button>
+             </div>
         </div>
 
         {/* Skills List */}
@@ -248,12 +289,22 @@ export default function ProfileSkillsPage() {
                             <span>{skill.percentage}%</span>
                         </div>
                     </div>
-                    <button 
-                        onClick={() => handleDeleteSkill(skill.id!)}
-                        className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-2"
-                    >
-                        <Trash2 size={16} />
-                    </button>
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button 
+                            onClick={() => handleEditSkill(skill)}
+                            className="text-gray-400 hover:text-orange-500 p-2"
+                            title="Edit"
+                        >
+                            <Pencil size={16} />
+                        </button>
+                        <button 
+                            onClick={() => handleDeleteSkill(skill.id!)}
+                            className="text-gray-400 hover:text-red-500 p-2"
+                            title="Delete"
+                        >
+                            <Trash2 size={16} />
+                        </button>
+                    </div>
                 </div>
             ))}
         </div>

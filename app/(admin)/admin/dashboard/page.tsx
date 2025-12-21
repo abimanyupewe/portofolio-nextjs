@@ -1,22 +1,30 @@
-export default function DashboardPage() {
+import { supabase } from "@/lib/supabase";
+
+export const revalidate = 0; // Ensure dynamic data
+
+export default async function DashboardPage() {
+  // Fetch Total Projects
+  const { count: projectCount } = await supabase
+    .from("projects")
+    .select("*", { count: "exact", head: true });
+
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Dashboard Overview</h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <StatsCard title="Total Projects" value="12" />
-        <StatsCard title="Total Blogs" value="5" />
-        <StatsCard title="Views" value="1.2k" />
-      </div>
-    </div>
-  );
-}
+      <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
+        Dashboard Overview
+      </h1>
 
-function StatsCard({ title, value }: { title: string; value: string }) {
-  return (
-    <div className="p-6 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm">
-      <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</h3>
-      <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{value}</p>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {/* Total Projects Card */}
+        <div className="p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 shadow-xl shadow-gray-200/50 dark:shadow-black/50 transition-all duration-300 hover:scale-[1.02]">
+          <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+            Total Projects
+          </h3>
+          <p className="text-4xl font-bold mt-2 text-gray-900 dark:text-white">
+            {projectCount || 0}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

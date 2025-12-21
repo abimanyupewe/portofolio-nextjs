@@ -168,7 +168,7 @@ const Navbar = (props: Props) => {
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                <li className="row-span-3">
+                <li className="row-span-2">
                   <NavigationMenuLink asChild>
                     <a
                       className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-blue-500/10 to-blue-500/20 dark:from-blue-900/20 dark:to-blue-900/40 p-6 no-underline outline-none focus:shadow-md"
@@ -209,7 +209,7 @@ const Navbar = (props: Props) => {
                     </Link>
                    </NavigationMenuLink>
                  </li>
-                 <li>
+                 <li className="col-span-2">
                    <NavigationMenuLink asChild>
                     <Link
                         href="/contact"

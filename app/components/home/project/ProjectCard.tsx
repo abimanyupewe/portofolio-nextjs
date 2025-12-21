@@ -58,8 +58,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
                  ))}
             </div>
           </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            {new Date(project.createdAt).toLocaleDateString()}
+          <p className="text-xs text-gray-500 dark:text-gray-400" suppressHydrationWarning>
+            {(() => {
+                const dateString = project.created_at || project.createdAt;
+                const date = dateString ? new Date(dateString) : new Date();
+                return isNaN(date.getTime()) ? "Just now" : date.toLocaleDateString("id-ID", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric"
+                });
+            })()}
           </p>
         </div>
       </div>
