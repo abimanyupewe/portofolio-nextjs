@@ -22,7 +22,7 @@ const Counter: React.FC<CounterProps> = ({ end, label }) => {
 
   useEffect(() => {
     let start = 0;
-    const duration = 2000; // Durasi animasi dalam ms
+    const duration = 2000;
     const intervalTime = 20;
     const step = end / (duration / intervalTime);
 
@@ -34,29 +34,35 @@ const Counter: React.FC<CounterProps> = ({ end, label }) => {
       }
       setCount(Math.floor(start));
     }, intervalTime);
+    return () => clearInterval(counter);
   }, [end]);
 
   return (
-    <div className="flex flex-col items-center text-center p-4">
+    <div className="flex items-center justify-center p-4 space-x-3">
       <motion.h2
-        className="text-xl sm:text-4xl font-semibold text-violet-500 font-ubuntu"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
+        className="text-5xl md:text-7xl font-black text-emerald-500 dark:text-emerald-400 tracking-tight"
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.5 }}
       >
         {count}+
       </motion.h2>
-      <p className="text-lg text-gray-600 dark:text-gray-400 font-poppins">{label}</p>
+      <p className="text-sm font-medium uppercase tracking-widest text-gray-500 dark:text-gray-400 mt-2">
+        {label}
+      </p>
     </div>
   );
 };
 
 const CounterSection: React.FC<CounterSectionProps> = ({ counters }) => {
   return (
-    <div className="flex justify-center gap-10 bg-gray-100 dark:bg-zinc-900/50 py-12 w-full transition-colors">
-      {counters.map((counter: CounterData, index: number) => (
-        <Counter key={index} end={counter.end} label={counter.label} />
-      ))}
+    <div className="w-full py-20 dark:bg-black bg-white transition-colors border-y border-gray-100 dark:border-zinc-800/50">
+      <div className="flex flex-wrap justify-center gap-12 md:gap-32 max-w-7xl mx-auto px-4">
+        {counters.map((counter: CounterData, index: number) => (
+          <Counter key={index} end={counter.end} label={counter.label} />
+        ))}
+      </div>
     </div>
   );
 };

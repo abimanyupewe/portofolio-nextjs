@@ -28,7 +28,7 @@ const FilterCheckbox: React.FC<FilterCheckboxProps> = ({
         <h3 className="font-semibold text-gray-800 dark:text-gray-200 text-sm">Filter Status</h3>
         <button
           onClick={toggleSelectAll}
-          className="text-xs text-purple-600 hover:text-purple-800 font-medium transition-colors duration-200"
+          className="text-xs text-emerald-600 hover:text-emerald-800 font-medium transition-colors duration-200"
         >
           {allSelected ? "Clear All" : "Select All"}
         </button>
@@ -41,11 +41,10 @@ const FilterCheckbox: React.FC<FilterCheckboxProps> = ({
           return (
             <label
               key={status}
-              className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200 group ${
-                isChecked
-                  ? "bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800"
+              className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200 group ${isChecked
+                  ? "bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800"
                   : "hover:bg-gray-50 dark:hover:bg-zinc-800/50 border border-transparent"
-              }`}
+                }`}
             >
               <div className="relative">
                 <input
@@ -58,11 +57,11 @@ const FilterCheckbox: React.FC<FilterCheckboxProps> = ({
                         : [...prev, status]
                     );
                   }}
-                  className="h-4 w-4 text-purple-600 bg-white dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 rounded focus:ring-purple-500 focus:ring-2 transition-colors duration-200"
+                  className="h-4 w-4 text-emerald-600 bg-white dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 rounded focus:ring-emerald-500 focus:ring-2 transition-colors duration-200"
                 />
                 {isChecked && (
                   <svg
-                    className="absolute inset-0 w-4 h-4 text-purple-600 pointer-events-none"
+                    className="absolute inset-0 w-4 h-4 text-emerald-600 pointer-events-none"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -75,11 +74,10 @@ const FilterCheckbox: React.FC<FilterCheckboxProps> = ({
                 )}
               </div>
               <span
-                className={`ml-3 text-sm transition-colors duration-200 ${
-                  isChecked
-                    ? "text-purple-800 dark:text-purple-300 font-medium"
+                className={`ml-3 text-sm transition-colors duration-200 ${isChecked
+                    ? "text-emerald-800 dark:text-emerald-300 font-medium"
                     : "text-gray-700 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200"
-                }`}
+                  }`}
               >
                 {status}
               </span>
@@ -91,7 +89,7 @@ const FilterCheckbox: React.FC<FilterCheckboxProps> = ({
       {/* Selected count */}
       {filters.length > 0 && (
         <div className="mt-3 pt-2 border-t border-gray-100 dark:border-zinc-800">
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300">
             {filters.length} selected
           </span>
         </div>

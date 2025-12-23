@@ -1,77 +1,108 @@
 import Link from "next/link";
 import React from "react";
+import { Github, Instagram, Linkedin, Mail, Twitter } from "lucide-react";
 
 type Props = {};
 
 const Footer = (props: Props) => {
   return (
-    <div className="p-3 w-full">
-      <div className="px-10 bg-gray-200 dark:bg-zinc-900 rounded-lg transition-colors">
-        <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-14 my-10 mt-40 text-sm pt-10">
-          <div className="">
-            <Link href="#home">
-              <h1 className="text-3xl dark:text-white">tiKoma;</h1>
+    <footer className="w-full bg-white dark:bg-black border-t border-gray-100 dark:border-neutral-900 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-8">
+
+          {/* Brand Column */}
+          <div className="space-y-4">
+            <Link href="#home" className="inline-block">
+              <h1 className="text-2xl font-bold text-black dark:text-white">
+                Abimanyu<span className="text-emerald-500">.</span>
+              </h1>
             </Link>
-            <p className="w-full md:w-2/3 text-gray-600 dark:text-gray-400">
-              Thank you for visiting my portfolio website.
+            <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed max-w-xs">
+              Crafting digital experiences with passion and precision. Building the web, one pixel at a time.
             </p>
+            <div className="flex items-center gap-4 mt-6">
+              <SocialLink href="#" icon={<Github size={20} />} label="GitHub" />
+              <SocialLink href="#" icon={<Linkedin size={20} />} label="LinkedIn" />
+              <SocialLink href="#" icon={<Instagram size={20} />} label="Instagram" />
+              <SocialLink href="mailto:abimanyupw369@gmail.com" icon={<Mail size={20} />} label="Email" />
+            </div>
           </div>
 
-          <div className="">
-            <p className="text-xl font-medium mb-5 dark:text-white">NAVIGATION</p>
-            <ul className="flex flex-col gap-1 text-gray-600 dark:text-gray-400">
-              <li className="">
-                <Link
-                  href="#home"
-                  className="hover:text-gray-900 dark:hover:text-white transition-colors duration-300"
-                >
-                  Home
-                </Link>
-              </li>
-              <li className="">
-                <Link
-                  href="#project"
-                  className="hover:text-gray-900 dark:hover:text-white transition-colors duration-300"
-                >
-                  Projects
-                </Link>
-              </li>
-              <li className="">
-                <Link
-                  href="/about"
-                  className="hover:text-gray-900 dark:hover:text-white transition-colors duration-300"
-                >
-                  About
-                </Link>
-              </li>
-              <li className="">
-                <Link
-                  href="#contact"
-                  className="hover:text-gray-900 dark:hover:text-white transition-colors duration-300"
-                >
-                  Contact
-                </Link>
-              </li>
+          {/* Navigation Column */}
+          <div className="md:pl-10">
+            <h3 className="text-sm font-semibold text-black dark:text-white uppercase tracking-wider mb-4">
+              Navigation
+            </h3>
+            <ul className="space-y-3">
+              <FooterLink href="#home">Home</FooterLink>
+              <FooterLink href="#about">About</FooterLink>
+              <FooterLink href="#project">Projects</FooterLink>
+              <FooterLink href="#experience">Experience</FooterLink>
             </ul>
           </div>
 
-          <div className="">
-            <p className="text-xl font-medium mb-5 dark:text-white">GET IN TOUCH</p>
-            <ul className="flex flex-col gap-1 text-gray-600 dark:text-gray-400">
-              <li className="">+62 857-9145-7210</li>
-              <li className="">abimanyupw369@gmail.com</li>
+          {/* Contact / Info Column */}
+          <div>
+            <h3 className="text-sm font-semibold text-black dark:text-white uppercase tracking-wider mb-4">
+              Get in Touch
+            </h3>
+            <ul className="space-y-3 text-sm text-neutral-600 dark:text-neutral-400">
+              <li className="flex items-start gap-3">
+                <span className="font-medium text-black dark:text-white">Email:</span>
+                <a href="mailto:abimanyupw369@gmail.com" className="hover:text-emerald-500 transition-colors">
+                  abimanyupw369@gmail.com
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="font-medium text-black dark:text-white">Location:</span>
+                <span>Indonesia</span>
+              </li>
+              <li className="mt-4">
+                <p className="text-xs text-neutral-500">
+                  Open for freelance opportunities and collaborations.
+                </p>
+              </li>
             </ul>
           </div>
         </div>
 
-        {/* copryrigth */}
-        <div>
-          <hr className="border-black dark:border-zinc-700" />
-          <p className="py-5 text-sm dark:text-gray-500">tikKoma; | ABIMANYU | Copyright 2025</p>
+        {/* Bottom Bar */}
+        <div className="border-t border-gray-100 dark:border-neutral-900 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-neutral-500 dark:text-neutral-500 text-center md:text-left">
+            &copy; {new Date().getFullYear()} Abimanyu. All rights reserved.
+          </p>
+          <div className="flex items-center gap-6 text-xs text-neutral-500 dark:text-neutral-500">
+            <span>Privacy Policy</span>
+            <span>Terms of Service</span>
+          </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 };
+
+// Helper Components for cleaner code
+const FooterLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <li>
+    <Link
+      href={href}
+      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors duration-200"
+    >
+      {children}
+    </Link>
+  </li>
+);
+
+const SocialLink = ({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) => (
+  <a
+    href={href}
+    aria-label={label}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-neutral-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors duration-200 transform hover:scale-110"
+  >
+    {icon}
+  </a>
+);
 
 export default Footer;

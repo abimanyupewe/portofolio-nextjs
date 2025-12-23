@@ -3,6 +3,7 @@
 import React from "react";
 import Badge from "./ColorMapping";
 import ProjectGallery from "./ProjectGallery";
+import { Github, ExternalLink } from "lucide-react";
 
 // Interface matching normalized Supabase data
 export interface ProjectType {
@@ -14,11 +15,12 @@ export interface ProjectType {
   language: string[];
   createdAt: string;
   created_at?: string; // Supabase field
-  previewLink?: string;
+  preview_link?: string;
+  repo_link?: string;
   thumbnail_url?: string;
   gallery_urls?: string[];
   // Legacy support for local data (temporary)
-  image?: string | string[]; 
+  image?: string | string[];
 }
 
 interface ProjectPopupProps {
@@ -27,15 +29,15 @@ interface ProjectPopupProps {
 }
 
 const ProjectPopup: React.FC<ProjectPopupProps> = ({ project, onClose }) => {
-  
+
   // Normalize images: Combine thumbnail and gallery, or use legacy image field
   const getImages = (): string[] => {
-      if (project.thumbnail_url) {
-          return [project.thumbnail_url, ...(project.gallery_urls || [])];
-      }
-      if (Array.isArray(project.image)) return project.image;
-      if (typeof project.image === 'string') return [project.image];
-      return [];
+    if (project.thumbnail_url) {
+      return [project.thumbnail_url, ...(project.gallery_urls || [])];
+    }
+    if (Array.isArray(project.image)) return project.image;
+    if (typeof project.image === 'string') return [project.image];
+    return [];
   };
 
   const images = getImages();
@@ -65,10 +67,10 @@ const ProjectPopup: React.FC<ProjectPopupProps> = ({ project, onClose }) => {
 
       {/* Modal Content */}
       <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-100 dark:border-zinc-800">
-        
+
         {/* Gallery Section */}
         <div className="mb-8">
-            <ProjectGallery images={images} title={project.title} />
+          <ProjectGallery images={images} title={project.title} />
         </div>
 
         {/* Project Title */}
@@ -87,7 +89,7 @@ const ProjectPopup: React.FC<ProjectPopupProps> = ({ project, onClose }) => {
             <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Category:</span>
             <div className="flex flex-wrap gap-1">
               {project.category?.map((cat, index) => (
-                 <Badge key={index} type="categoryProject" value={cat} />
+                <Badge key={index} type="categoryProject" value={cat} />
               ))}
             </div>
           </div>
@@ -95,61 +97,64 @@ const ProjectPopup: React.FC<ProjectPopupProps> = ({ project, onClose }) => {
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Language:</span>
             <div className="flex flex-wrap gap-1">
-               {project.language?.map((lang, index) => (
-                  <Badge key={index} type="language" value={lang} />
-               ))}
+              {project.language?.map((lang, index) => (
+                <Badge key={index} type="language" value={lang} />
+              ))}
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Status:</span>
             <div className="flex flex-wrap gap-1">
-               {project.status?.map((stat, index) => (
-                  <Badge key={index} type="status" value={stat} />
-               ))}
+              {project.status?.map((stat, index) => (
+                <Badge key={index} type="status" value={stat} />
+              ))}
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Created:</span>
             <span className="text-sm text-gray-700 dark:text-gray-300">
-                {(() => {
-                    const dateString = project.created_at || project.createdAt;
-                    const date = dateString ? new Date(dateString) : new Date();
-                    return isNaN(date.getTime()) ? "Just now" : date.toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric"
-                    });
-                })()}
+              {(() => {
+                const dateString = project.created_at || project.createdAt;
+                const date = dateString ? new Date(dateString) : new Date();
+                return isNaN(date.getTime()) ? "Just now" : date.toLocaleDateString("id-ID", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric"
+                });
+              })()}
             </span>
           </div>
         </div>
 
-        {/* Preview Button */}
-        {project.previewLink && project.previewLink !== "None" && (
-          <a
-            href={project.previewLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          {project.preview_link && project.preview_link !== "None" && (
+            <a
+              href={project.preview_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              />
-            </svg>
-            View Live Preview
-          </a>
-        )}
+              <ExternalLink className="w-5 h-5 mr-2" />
+              View Live Preview
+            </a>
+          )}
+
+          {project.repo_link && project.repo_link !== "None" && (
+            <a
+              href={project.repo_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-900 dark:text-white font-medium rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+            >
+              <Github className="w-5 h-5 mr-2" />
+              View Repository
+            </a>
+          )}
+        </div>
+
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { Plus, Trash2, Loader2, Calendar } from "lucide-react";
+import { Plus, Trash2, Loader2, Calendar, Pencil, X } from "lucide-react";
 import ImageUpload from "@/app/components/admin/ImageUpload";
 
 interface Experience {
@@ -25,8 +25,10 @@ interface Certificate {
 
 export default function ExperiencesPage() {
   const [loading, setLoading] = useState(true);
-    // Experience State
+  
+  // Experience State
   const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [editingExp, setEditingExp] = useState<Experience | null>(null);
   const [newExp, setNewExp] = useState<Experience>({
     company: "",
     position: "",
@@ -37,6 +39,7 @@ export default function ExperiencesPage() {
   
   // Certificate State
   const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [editingCert, setEditingCert] = useState<Certificate | null>(null);
   const [newCert, setNewCert] = useState<Certificate>({
     title: "",
     issuer: "",
@@ -64,15 +67,44 @@ export default function ExperiencesPage() {
   };
 
   // --- EXPERIENCE HANDLERS ---
-  const handleAddExp = async () => {
+  const handleSaveExp = async () => {
       if(!newExp.company || !newExp.position) return alert("Company & Position required");
       
-      const { error } = await supabase.from("experiences").insert([newExp]);
-      if (error) alert("Error adding experience: " + error.message);
-      else {
-          setNewExp({ company: "", position: "", duration: "", description: "", logo_url: "" });
+      try {
+          if (editingExp?.id) {
+              // UPDATE
+              const { error } = await supabase.from("experiences").update({
+                  company: newExp.company,
+                  position: newExp.position,
+                  duration: newExp.duration,
+                  description: newExp.description,
+                  logo_url: newExp.logo_url
+              }).eq("id", editingExp.id);
+              
+              if (error) throw error;
+              alert("Experience updated!");
+          } else {
+              // INSERT
+               const { error } = await supabase.from("experiences").insert([newExp]);
+               if (error) throw error;
+          }
+
+          resetExpForm();
           fetchData();
+      } catch (error: any) {
+          alert("Error saving experience: " + error.message);
       }
+  };
+
+  const handleEditExp = (exp: Experience) => {
+      setEditingExp(exp);
+      setNewExp(exp);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const resetExpForm = () => {
+      setEditingExp(null);
+      setNewExp({ company: "", position: "", duration: "", description: "", logo_url: "" });
   };
 
   const handleDeleteExp = async (id: string) => {
@@ -82,15 +114,45 @@ export default function ExperiencesPage() {
   };
 
   // --- CERTIFICATE HANDLERS ---
-  const handleAddCert = async () => {
+  const handleSaveCert = async () => {
       if(!newCert.title || !newCert.issuer) return alert("Title & Issuer required");
 
-      const { error } = await supabase.from("certificates").insert([newCert]);
-      if (error) alert("Error adding certificate: " + error.message);
-      else {
-          setNewCert({ title: "", issuer: "", date: "", credential_url: "", image_url: "" });
+      try {
+          if (editingCert?.id) {
+               // UPDATE
+               const { error } = await supabase.from("certificates").update({
+                   title: newCert.title,
+                   issuer: newCert.issuer,
+                   date: newCert.date,
+                   credential_url: newCert.credential_url,
+                   image_url: newCert.image_url
+               }).eq("id", editingCert.id);
+
+               if (error) throw error;
+               alert("Certificate updated!");
+          } else {
+              // INSERT
+              const { error } = await supabase.from("certificates").insert([newCert]);
+              if (error) throw error;
+          }
+
+          resetCertForm();
           fetchData();
+      } catch (error: any) {
+          alert("Error saving certificate: " + error.message);
       }
+  };
+
+  const handleEditCert = (cert: Certificate) => {
+      setEditingCert(cert);
+      setNewCert(cert);
+      // scroll to certificate section roughly
+      window.scrollTo({ top: 400, behavior: "smooth" }); 
+  };
+
+  const resetCertForm = () => {
+      setEditingCert(null);
+      setNewCert({ title: "", issuer: "", date: "", credential_url: "", image_url: "" });
   };
 
   const handleDeleteCert = async (id: string) => {
@@ -111,8 +173,8 @@ export default function ExperiencesPage() {
             Professional Experience
         </h2>
         
-        {/* Add Experience Form */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 dark:bg-zinc-800/30 p-4 rounded-lg">
+        {/* Add/Edit Experience Form */}
+        <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-lg ${editingExp ? 'bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800' : 'bg-gray-50 dark:bg-zinc-800/30'}`}>
              <div className="space-y-2">
                  <input 
                     type="text" 
@@ -152,19 +214,31 @@ export default function ExperiencesPage() {
                         folder="experiences"
                      />
                  </div>
-                 <button 
-                    onClick={handleAddExp}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded flex items-center justify-center gap-2"
-                 >
-                     <Plus size={16} /> Add Experience
-                 </button>
+                 
+                 <div className="flex gap-2">
+                     {editingExp && (
+                        <button 
+                            onClick={resetExpForm}
+                            className="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 rounded flex items-center justify-center gap-2"
+                        >
+                            <X size={16} /> Cancel
+                        </button>
+                     )}
+                     <button 
+                        onClick={handleSaveExp}
+                        className={`flex-1 ${editingExp ? 'bg-orange-600 hover:bg-orange-700' : 'bg-blue-600 hover:bg-blue-700'} text-white py-2 rounded flex items-center justify-center gap-2`}
+                     >
+                         {editingExp ? <Pencil size={16} /> : <Plus size={16} />} 
+                         {editingExp ? "Update Experience" : "Add Experience"}
+                     </button>
+                 </div>
              </div>
         </div>
 
         {/* Experience List */}
         <div className="space-y-4">
             {experiences.map((exp) => (
-                <div key={exp.id} className="flex gap-4 p-4 border border-gray-200 dark:border-zinc-800 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800/30 transition-colors">
+                <div key={exp.id} className="flex gap-4 p-4 border border-gray-200 dark:border-zinc-800 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800/30 transition-colors group">
                     {exp.logo_url && (
                         <div className="w-12 h-12 relative flex-shrink-0">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -177,10 +251,18 @@ export default function ExperiencesPage() {
                         <p className="text-xs text-gray-500 mb-2">{exp.duration}</p>
                         <p className="text-sm text-gray-600 dark:text-gray-300">{exp.description}</p>
                     </div>
-                    <div>
+                    <div className="flex items-start gap-1">
+                        <button 
+                            onClick={() => handleEditExp(exp)}
+                            className="p-2 text-gray-400 hover:text-orange-500"
+                            title="Edit"
+                        >
+                            <Pencil size={18} />
+                        </button>
                         <button 
                             onClick={() => handleDeleteExp(exp.id!)}
                             className="p-2 text-gray-400 hover:text-red-500"
+                            title="Delete"
                         >
                             <Trash2 size={18} />
                         </button>
@@ -196,8 +278,8 @@ export default function ExperiencesPage() {
             Certificates
         </h2>
         
-        {/* Add Certificate Form */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 dark:bg-zinc-800/30 p-4 rounded-lg">
+        {/* Add/Edit Certificate Form */}
+        <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-lg ${editingCert ? 'bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800' : 'bg-gray-50 dark:bg-zinc-800/30'}`}>
              <div className="space-y-2">
                  <input 
                     type="text" 
@@ -236,19 +318,31 @@ export default function ExperiencesPage() {
                         folder="certificates"
                      />
                  </div>
-                 <button 
-                    onClick={handleAddCert}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded flex items-center justify-center gap-2"
-                 >
-                     <Plus size={16} /> Add Certificate
-                 </button>
+                 
+                 <div className="flex gap-2">
+                     {editingCert && (
+                        <button 
+                            onClick={resetCertForm}
+                            className="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 rounded flex items-center justify-center gap-2"
+                        >
+                            <X size={16} /> Cancel
+                        </button>
+                     )}
+                     <button 
+                        onClick={handleSaveCert}
+                        className={`flex-1 ${editingCert ? 'bg-orange-600 hover:bg-orange-700' : 'bg-blue-600 hover:bg-blue-700'} text-white py-2 rounded flex items-center justify-center gap-2`}
+                     >
+                         {editingCert ? <Pencil size={16} /> : <Plus size={16} />} 
+                         {editingCert ? "Update Certificate" : "Add Certificate"}
+                     </button>
+                 </div>
              </div>
         </div>
 
          {/* Certificates List */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {certificates.map((cert) => (
-                <div key={cert.id} className="flex gap-4 p-4 border border-gray-200 dark:border-zinc-800 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800/30 transition-colors">
+                <div key={cert.id} className="flex gap-4 p-4 border border-gray-200 dark:border-zinc-800 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800/30 transition-colors group">
                      {cert.image_url ? (
                         <div className="w-16 h-12 relative flex-shrink-0 bg-gray-100 rounded overflow-hidden">
                              {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -264,10 +358,18 @@ export default function ExperiencesPage() {
                         <p className="text-xs text-gray-600 dark:text-gray-400">{cert.issuer}</p>
                         <p className="text-xs text-gray-500">{new Date(cert.date).toLocaleDateString()}</p>
                     </div>
-                     <div>
+                     <div className="flex items-center gap-1">
+                        <button 
+                            onClick={() => handleEditCert(cert)}
+                            className="p-2 text-gray-400 hover:text-orange-500"
+                            title="Edit"
+                        >
+                            <Pencil size={16} />
+                        </button>
                         <button 
                             onClick={() => handleDeleteCert(cert.id!)}
                             className="p-2 text-gray-400 hover:text-red-500"
+                            title="Delete"
                         >
                             <Trash2 size={16} />
                         </button>

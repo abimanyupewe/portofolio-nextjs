@@ -10,7 +10,7 @@ export const StickyScroll = ({
 }: {
   content: {
     title: string;
-    description: string;
+    description: string | React.ReactNode;
     content?: React.ReactNode | any;
   }[];
   contentClassName?: string;
@@ -46,9 +46,9 @@ export const StickyScroll = ({
     "#171717", // neutral-900
   ];
   const linearGradients = [
-    "linear-gradient(to bottom right, #06b6d4, #10b981)", // cyan-500 to emerald-500
-    "linear-gradient(to bottom right, #ec4899, #6366f1)", // pink-500 to indigo-500
-    "linear-gradient(to bottom right, #f97316, #eab308)", // orange-500 to yellow-500
+    "linear-gradient(to bottom right, #10b981, #059669)", // emerald-500 to emerald-600
+    "linear-gradient(to bottom right, #34d399, #059669)", // emerald-400 to emerald-600
+    "linear-gradient(to bottom right, #059669, #047857)", // emerald-600 to emerald-700
   ];
 
   const [backgroundGradient, setBackgroundGradient] = useState(
