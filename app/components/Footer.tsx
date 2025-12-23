@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { Github, Instagram, Linkedin, Mail, Twitter } from "lucide-react";
+import { Github, Instagram, Linkedin, Mail } from "lucide-react";
 
 type Props = {};
 
@@ -21,9 +21,9 @@ const Footer = (props: Props) => {
               Crafting digital experiences with passion and precision. Building the web, one pixel at a time.
             </p>
             <div className="flex items-center gap-4 mt-6">
-              <SocialLink href="#" icon={<Github size={20} />} label="GitHub" />
-              <SocialLink href="#" icon={<Linkedin size={20} />} label="LinkedIn" />
-              <SocialLink href="#" icon={<Instagram size={20} />} label="Instagram" />
+              <SocialLink href="https://github.com/abimanyupewe" icon={<Github size={20} />} label="GitHub" />
+              <SocialLink href="https://www.linkedin.com/in/abimanyu-priyo-widagdo-101a46279/" icon={<Linkedin size={20} />} label="LinkedIn" />
+              <SocialLink href="https://www.instagram.com/hoohbim_" icon={<Instagram size={20} />} label="Instagram" />
               <SocialLink href="mailto:abimanyupw369@gmail.com" icon={<Mail size={20} />} label="Email" />
             </div>
           </div>
