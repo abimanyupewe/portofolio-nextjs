@@ -55,7 +55,7 @@ export default async function Home() {
 
   const counters = [
     { end: projects?.length || 0, label: "Total Projects" },
-    { end: 3, label: "Years Experience" },
+    { end: 1, label: "Years Experience" },
   ];
 
   return (
