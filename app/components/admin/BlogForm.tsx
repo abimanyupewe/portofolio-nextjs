@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import ImageUpload from "./ImageUpload";
 import TagInput from "./TagInput";
 import { Loader2 } from "lucide-react";
+import { createBlog, updateBlog } from "@/app/actions/blogs";
 
 interface BlogFormProps {
   initialData?: any;
@@ -42,15 +42,10 @@ const BlogForm: React.FC<BlogFormProps> = ({ initialData }) => {
     try {
       if (initialData?.id) {
         // Update
-        const { error } = await supabase
-          .from("blogs")
-          .update(formData)
-          .eq("id", initialData.id);
-        if (error) throw error;
+        await updateBlog(initialData.id, formData);
       } else {
         // Create
-        const { error } = await supabase.from("blogs").insert([formData]);
-        if (error) throw error;
+        await createBlog(formData);
       }
 
       router.push("/admin/dashboard/blogs");

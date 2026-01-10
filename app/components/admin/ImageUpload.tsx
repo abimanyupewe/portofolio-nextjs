@@ -2,14 +2,13 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Upload, X } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { Upload, X, Loader2 } from "lucide-react";
+import { uploadImage } from "@/app/actions/upload";
 
 interface ImageUploadProps {
   value?: string | string[];
   onChange: (url: string | string[]) => void;
   multiple?: boolean;
-  bucket?: string;
   folder?: string;
   label?: string;
 }
@@ -18,8 +17,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   value,
   onChange,
   multiple = false,
-  bucket = "portfolio-assets",
-  folder = "projects",
+  folder = "portfolio",
   label = "Upload Image",
 }) => {
   const [uploading, setUploading] = useState(false);
@@ -35,20 +33,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       const newUrls: string[] = [];
 
       for (const file of files) {
-        const fileExt = file.name.split(".").pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${folder}/${fileName}`;
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("folder", folder);
 
-        const { error: uploadError } = await supabase.storage
-          .from(bucket)
-          .upload(filePath, file);
-
-        if (uploadError) {
-          throw uploadError;
-        }
-
-        const { data } = supabase.storage.from(bucket).getPublicUrl(filePath);
-        newUrls.push(data.publicUrl);
+        const { url } = await uploadImage(formData);
+        newUrls.push(url);
       }
 
       if (multiple) {
@@ -107,7 +97,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         {(!value || multiple || (Array.isArray(value) && value.length === 0)) && (
           <label className="w-32 h-32 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg cursor-pointer hover:border-blue-500 dark:hover:border-blue-500 hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
             {uploading ? (
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+              <Loader2 className="animate-spin h-6 w-6 text-blue-500" />
             ) : (
               <>
                 <Upload className="w-6 h-6 text-gray-400 mb-2" />

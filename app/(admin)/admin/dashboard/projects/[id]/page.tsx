@@ -1,11 +1,12 @@
 import React from "react";
 import ProjectForm from "@/app/components/admin/ProjectForm";
 import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import { getProject } from "@/app/actions/projects";
 
-// Next.js 15: params is a Promise
+// ...
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }
@@ -13,13 +14,9 @@ interface PageProps {
 export default async function EditProjectPage({ params }: PageProps) {
   const { id } = await params;
 
-  const { data: project, error } = await supabase
-    .from("projects")
-    .select("*")
-    .eq("id", id)
-    .single();
+  const project = await getProject(id);
 
-  if (error || !project) {
+  if (!project) {
     notFound();
   }
 
@@ -34,7 +31,7 @@ export default async function EditProjectPage({ params }: PageProps) {
         </Link>
         <h1 className="text-2xl font-bold dark:text-white">Edit Project</h1>
       </div>
-      
+
       <ProjectForm initialData={project} />
     </div>
   );

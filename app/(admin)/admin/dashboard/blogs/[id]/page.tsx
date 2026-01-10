@@ -2,7 +2,7 @@ import React from "react";
 import BlogForm from "@/app/components/admin/BlogForm";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+import { getBlog } from "@/app/actions/blogs";
 import { notFound } from "next/navigation";
 
 interface PageProps {
@@ -12,13 +12,9 @@ interface PageProps {
 export default async function EditBlogPage({ params }: PageProps) {
   const { id } = await params;
 
-  const { data: blog, error } = await supabase
-    .from("blogs")
-    .select("*")
-    .eq("id", id)
-    .single();
+  const blog = await getBlog(id);
 
-  if (error || !blog) {
+  if (!blog) {
     notFound();
   }
 
@@ -33,7 +29,7 @@ export default async function EditBlogPage({ params }: PageProps) {
         </Link>
         <h1 className="text-2xl font-bold dark:text-white">Edit Post</h1>
       </div>
-      
+
       <BlogForm initialData={blog} />
     </div>
   );

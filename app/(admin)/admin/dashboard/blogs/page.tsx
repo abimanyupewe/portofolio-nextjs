@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash2 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 import Image from "next/image";
+import { getBlogs, deleteBlog } from "@/app/actions/blogs";
 
 interface Blog {
   id: string;
@@ -25,27 +25,22 @@ export default function BlogsPage() {
 
   const fetchBlogs = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("blogs")
-      .select("id, title, slug, published, thumbnail_url, created_at")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error("Error fetching blogs:", error);
-    } else {
+    try {
+      const data = await getBlogs();
       setBlogs(data || []);
+    } catch (error) {
+      console.error("Error fetching blogs", error);
     }
     setLoading(false);
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this post?")) return;
-
-    const { error } = await supabase.from("blogs").delete().eq("id", id);
-    if (error) {
-      alert("Error deleting blog");
-    } else {
+    try {
+      await deleteBlog(id);
       fetchBlogs();
+    } catch (error) {
+      alert("Error deleting blog");
     }
   };
 
@@ -107,11 +102,10 @@ export default function BlogsPage() {
                   </td>
                   <td className="p-4 hidden md:table-cell">
                     <span
-                      className={`px-2 py-1 text-xs rounded-full ${
-                        blog.published
-                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
-                          : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300"
-                      }`}
+                      className={`px-2 py-1 text-xs rounded-full ${blog.published
+                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
+                        : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300"
+                        }`}
                     >
                       {blog.published ? "Published" : "Draft"}
                     </span>

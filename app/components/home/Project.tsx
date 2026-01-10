@@ -1,6 +1,9 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TabBar from "./project/TabBar";
 import ProjectCard from "./project/ProjectCard";
 import ProjectPopup, { ProjectType } from "./project/ProjectPopup";
@@ -24,7 +27,31 @@ interface ProjectProps {
 }
 
 const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Initial check because filteredProjects changes and we want to animate new items
+    const ctx = gsap.context(() => {
+      gsap.from(".project-card", {
+        scrollTrigger: {
+          trigger: ".project-grid",
+          start: "top 80%",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power3.out",
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, { scope: containerRef, dependencies: [] }); // We might need to re-run this when filteredProjects changes, but for simplicity let's target the grid container render
+
   const [activeTab, setActiveTab] = useState<string>("All Project");
+
   const [selectedProject, setSelectedProject] = useState<ProjectType | null>(null);
   const [filters, setFilters] = useState<string[]>([]);
   const [filtersLanguage, setFiltersLanguage] = useState<string[]>([]);
@@ -155,7 +182,7 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
           </aside>
 
           {/* Main Grid */}
-          <main className="flex-1 min-h-[600px]" id="project-grid">
+          <main className="flex-1 min-h-[600px]" id="project-grid" ref={containerRef}>
 
             {/* Desktop Count */}
             <div className="hidden md:flex justify-between items-center mb-6">
@@ -166,13 +193,14 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
 
             {filteredProjects.length > 0 ? (
               <div className="space-y-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6 project-grid">
                   {currentProjects.map((project) => (
-                    <ProjectCard
-                      key={project.id}
-                      project={project}
-                      onClick={() => setSelectedProject(project)}
-                    />
+                    <div key={project.id} className="project-card">
+                      <ProjectCard
+                        project={project}
+                        onClick={() => setSelectedProject(project)}
+                      />
+                    </div>
                   ))}
                 </div>
 
