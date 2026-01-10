@@ -1,6 +1,9 @@
 import React from "react";
 import ProjectForm from "@/app/components/admin/ProjectForm";
 import { ArrowLeft } from "lucide-react";
+
+export const dynamic = "force-dynamic";
+
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getProject } from "@/app/actions/projects";

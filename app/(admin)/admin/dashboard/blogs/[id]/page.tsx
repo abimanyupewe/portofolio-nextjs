@@ -1,6 +1,9 @@
 import React from "react";
 import BlogForm from "@/app/components/admin/BlogForm";
 import { ArrowLeft } from "lucide-react";
+
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { getBlog } from "@/app/actions/blogs";
 import { notFound } from "next/navigation";
