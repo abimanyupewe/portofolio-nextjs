@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
-export async function GET() {
-    // Return a 401 Unauthorized response to trigger the browser to clear Basic Auth credentials
-    return new NextResponse("Logged out", {
-        status: 401,
-        headers: {
-            "WWW-Authenticate": 'Basic realm="Secure Admin Area"',
-        },
-    });
+export async function GET(request: Request) {
+    const cookieStore = await cookies();
+    cookieStore.delete("admin_session");
+
+    return NextResponse.redirect(new URL("/login", request.url));
 }
