@@ -65,7 +65,7 @@ const Navbar = (props: Props) => {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Link
-              href="https://www.tiktok.com/@abimanyupriyowidagdo?is_from_webapp=1&sender_device=pc"
+              href="https://www.tiktok.com/@bim.dxd"
               target="_blank"
               className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:text-black dark:hover:text-white text-gray-500 dark:text-gray-400 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
             >
