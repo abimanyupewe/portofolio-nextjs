@@ -22,7 +22,7 @@ const FilterCheckbox: React.FC<FilterCheckboxProps> = ({
   };
 
   return (
-    <div className="space-y-3 p-4 bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800">
+    <div className="space-y-3 p-4 bg-white dark:bg-zinc-900 rounded-lg shadow-xs border border-gray-100 dark:border-zinc-800">
       {/* Header with select all toggle */}
       <div className="flex justify-between items-center">
         <h3 className="font-semibold text-gray-800 dark:text-gray-200 text-sm">Filter Status</h3>
@@ -41,7 +41,7 @@ const FilterCheckbox: React.FC<FilterCheckboxProps> = ({
           return (
             <label
               key={status}
-              className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200 group ${isChecked
+              className={`flex items-center p-3 rounded-md cursor-pointer transition-all duration-200 group ${isChecked
                   ? "bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800"
                   : "hover:bg-gray-50 dark:hover:bg-zinc-800/50 border border-transparent"
                 }`}
@@ -89,7 +89,7 @@ const FilterCheckbox: React.FC<FilterCheckboxProps> = ({
       {/* Selected count */}
       {filters.length > 0 && (
         <div className="mt-3 pt-2 border-t border-gray-100 dark:border-zinc-800">
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300">
             {filters.length} selected
           </span>
         </div>

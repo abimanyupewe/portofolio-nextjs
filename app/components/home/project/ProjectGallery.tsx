@@ -14,7 +14,7 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ images, title }) => {
 
   if (!hasMultipleImages) {
     return (
-      <div className="relative overflow-hidden rounded-xl group">
+      <div className="relative overflow-hidden rounded-lg group">
         <div className="relative w-full h-64 md:h-96">
              <Image
             src={mainImage}
@@ -32,7 +32,7 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ images, title }) => {
     <div className="flex flex-col md:flex-row gap-4">
       {/* Main Image */}
       <div className="flex-1">
-        <div className="relative overflow-hidden rounded-xl group w-full h-64 md:h-96">
+        <div className="relative overflow-hidden rounded-lg group w-full h-64 md:h-96">
           <Image
             src={mainImage}
             alt={title}
@@ -58,10 +58,10 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ images, title }) => {
               <button
                 key={index}
                 onClick={() => setMainImage(image)}
-                className={`relative w-20 h-14 cursor-pointer rounded-lg overflow-hidden bg-gray-100 border-2 transition-all duration-200 hover:shadow-md flex-shrink-0 ${
+                className={`relative w-20 h-14 cursor-pointer rounded-md overflow-hidden bg-gray-100 border-2 transition-all duration-200 hover:shadow-md flex-shrink-0 ${
                   mainImage === image
-                    ? "border-purple-500 ring-2 ring-purple-200 shadow-md"
-                    : "border-gray-200 hover:border-gray-300"
+                    ? "border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs"
+                    : "border-gray-200 hover:border-gray-300 dark:border-zinc-800"
                 }`}
               >
                 <Image
@@ -81,10 +81,10 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ images, title }) => {
             <button
               key={index}
               onClick={() => setMainImage(image)}
-              className={`relative w-full h-16 cursor-pointer rounded-lg overflow-hidden bg-gray-100 border-2 transition-all duration-200 hover:shadow-md flex-shrink-0 ${
+              className={`relative w-full h-16 cursor-pointer rounded-md overflow-hidden bg-gray-100 border-2 transition-all duration-200 hover:shadow-md flex-shrink-0 ${
                 mainImage === image
-                  ? "border-purple-500 ring-2 ring-purple-200 shadow-md"
-                  : "border-gray-200 hover:border-gray-300"
+                  ? "border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs"
+                  : "border-gray-200 hover:border-gray-300 dark:border-zinc-800"
               }`}
             >
               <Image

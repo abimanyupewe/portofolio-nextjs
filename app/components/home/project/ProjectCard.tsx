@@ -17,7 +17,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="cursor-pointer bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800 overflow-hidden hover:shadow-md hover:border-emerald-100 dark:hover:border-emerald-800 transition-all duration-300 group"
+      className="cursor-pointer bg-white dark:bg-zinc-900 rounded-lg shadow-xs border border-gray-100 dark:border-zinc-800 overflow-hidden hover:shadow-md hover:border-emerald-500/30 dark:hover:border-emerald-500/30 transition-all duration-300 group"
     >
       <div className="relative h-48 overflow-hidden">
         {displayImage ? (

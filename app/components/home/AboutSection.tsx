@@ -69,7 +69,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                 <div className="flex flex-col md:flex-row items-center gap-12">
                     {/* Image Side */}
                     <div className="w-full md:w-1/3 flex justify-center">
-                        <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden border-4 border-gray-100 dark:border-zinc-800 shadow-2xl">
+                        <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-lg overflow-hidden border-4 border-gray-100 dark:border-zinc-800 shadow-xl">
                             {profile?.avatar_url ? (
                                 <Image
                                     src={profile.avatar_url}
@@ -119,7 +119,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                                     <span className="text-gray-700 dark:text-gray-300 font-medium select-all">abimanyupw369@gmail.com</span>
                                     <button
                                         onClick={handleCopyEmail}
-                                        className="ml-2 p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-full transition-colors text-gray-500 dark:text-gray-400"
+                                        className="ml-2 p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-md transition-colors text-gray-500 dark:text-gray-400"
                                         title="Copy Email"
                                     >
                                         {copiedEmail ? <Check size={16} className="text-emerald-500" /> : <Copy size={16} />}
@@ -134,7 +134,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                                     <span className="text-gray-700 dark:text-gray-300 font-medium select-all">+62 857-9145-7210</span>
                                     <button
                                         onClick={handleCopyPhone}
-                                        className="ml-2 p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-full transition-colors text-gray-500 dark:text-gray-400"
+                                        className="ml-2 p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-md transition-colors text-gray-500 dark:text-gray-400"
                                         title="Copy Phone"
                                     >
                                         {copiedPhone ? <Check size={16} className="text-emerald-500" /> : <Copy size={16} />}
@@ -149,7 +149,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                                     <span className="text-gray-700 dark:text-gray-300 font-medium select-all">+62 819-9671-9560</span>
                                     <button
                                         onClick={handleCopyWhatsapp}
-                                        className="ml-2 p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-full transition-colors text-gray-500 dark:text-gray-400"
+                                        className="ml-2 p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-md transition-colors text-gray-500 dark:text-gray-400"
                                         title="Copy Whatsapp"
                                     >
                                         {copiedWhatsapp ? <Check size={16} className="text-emerald-500" /> : <Copy size={16} />}

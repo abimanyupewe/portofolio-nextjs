@@ -53,7 +53,7 @@ const Badge: React.FC<BadgeProps> = ({ type, value }) => {
         return (
           <span
             key={index}
-            className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium transition-colors duration-200 ${colors.bg} ${colors.text}`}
+            className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium transition-colors duration-200 ${colors.bg} ${colors.text}`}
           >
             {val}
           </span>

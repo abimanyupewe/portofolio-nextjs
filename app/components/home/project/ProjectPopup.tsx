@@ -47,7 +47,7 @@ const ProjectPopup: React.FC<ProjectPopupProps> = ({ project, onClose }) => {
       {/* Close Button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-gray-900 transition-all duration-200 shadow-lg hover:shadow-xl"
+        className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 hover:bg-white rounded-md flex items-center justify-center text-gray-600 hover:text-gray-900 transition-all duration-200 shadow-md"
         aria-label="Close popup"
       >
         <svg
@@ -66,7 +66,7 @@ const ProjectPopup: React.FC<ProjectPopupProps> = ({ project, onClose }) => {
       </button>
 
       {/* Modal Content */}
-      <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-100 dark:border-zinc-800">
+      <div className="bg-white dark:bg-zinc-900 rounded-lg p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-xl border border-gray-100 dark:border-zinc-800">
 
         {/* Gallery Section */}
         <div className="mb-8">
@@ -135,7 +135,7 @@ const ProjectPopup: React.FC<ProjectPopupProps> = ({ project, onClose }) => {
               href={project.preview_link}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+              className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-md transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5"
             >
               <ExternalLink className="w-5 h-5 mr-2" />
               View Live Preview
@@ -147,7 +147,7 @@ const ProjectPopup: React.FC<ProjectPopupProps> = ({ project, onClose }) => {
               href={project.repo_link}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-900 dark:text-white font-medium rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+              className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-900 dark:text-white font-medium rounded-md transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
             >
               <Github className="w-5 h-5 mr-2" />
               View Repository

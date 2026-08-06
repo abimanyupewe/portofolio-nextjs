@@ -62,7 +62,7 @@ const SertificateSection: React.FC<SertificateSectionProps> = ({ certificates = 
                         <p className="text-xl font-bold text-white">{cert.title}</p>
                         <p className="text-sm mt-2 text-emerald-100">{cert.issuer}</p>
                         {cert.credential_url && (
-                            <span className="mt-4 inline-block text-xs bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full transition-colors">View Credential</span>
+                            <span className="mt-4 inline-block text-xs bg-white/20 hover:bg-white/30 px-3 py-1 rounded-md transition-colors">View Credential</span>
                         )}
                     </div>
                 )}

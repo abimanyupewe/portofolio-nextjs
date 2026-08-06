@@ -139,7 +139,7 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
           </span>
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-zinc-100 dark:bg-zinc-900 rounded-full text-sm font-medium hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-zinc-100 dark:bg-zinc-900 rounded-md text-sm font-medium hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
           >
             <Filter className="w-4 h-4" />
             Filters
@@ -253,8 +253,8 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
                 )}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-20 text-center bg-gray-50 dark:bg-zinc-900/30 rounded-3xl border border-dashed border-gray-200 dark:border-zinc-800">
-                <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/20 rounded-full flex items-center justify-center mb-4 text-emerald-500">
+              <div className="flex flex-col items-center justify-center py-20 text-center bg-gray-50 dark:bg-zinc-900/30 rounded-lg border border-dashed border-gray-200 dark:border-zinc-800">
+                <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/20 rounded-md flex items-center justify-center mb-4 text-emerald-500">
                   <Filter className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">No projects found</h3>
@@ -267,7 +267,7 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
                     setFilters([]);
                     setFiltersLanguage([]);
                   }}
-                  className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full font-medium transition-colors"
+                  className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-md font-medium transition-colors"
                 >
                   Clear Filters
                 </button>
