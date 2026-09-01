@@ -1,5 +1,6 @@
 import Image from "next/image";
 import HeroSection from "@/app/components/home/HeroSection";
+import CurrentPositionSection from "@/app/components/home/CurrentPositionSection";
 import TechStackSection from "@/app/components/home/TechStackSection";
 import { CounterSection } from "@/app/components/home/props/CounterSection";
 import Project from "@/app/components/home/Project";
@@ -14,7 +15,6 @@ import SkillModel from "@/models/Skill";
 
 export const revalidate = 0; // Force dynamic for debugging/real-time
 
-// Helper to serialize Mongoose documents for Client Components
 // Helper to serialize Mongoose documents for Client Components
 const serialize = (doc: any) => {
   if (!doc) return null;
@@ -62,6 +62,7 @@ export default async function Home() {
     <div>
       <HeroSection profile={profile || undefined} />
       <CounterSection counters={counters} />
+      <CurrentPositionSection position={profile?.current_position} />
       <TechStackSection skills={skills || []} />
       <AboutSection profile={profile || null} />
       {/* Pass data to Project component */}

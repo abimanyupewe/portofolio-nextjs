@@ -4,9 +4,20 @@ import React, { useState, useEffect } from "react";
 import ImageUpload from "@/app/components/admin/ImageUpload";
 import TagInput from "@/app/components/admin/TagInput";
 import { Loader2, Plus, Trash2, Pencil, X } from "lucide-react";
-import { getProfile, updateProfile, getSkills, createSkill, updateSkill, deleteSkill } from "@/app/actions/profile";
+import { getProfile, updateProfile, updateCurrentPosition, getSkills, createSkill, updateSkill, deleteSkill } from "@/app/actions/profile";
 
 // Types
+interface CurrentPosition {
+    role: string;
+    company: string;
+    status_type: string;
+    location: string;
+    period: string;
+    description: string;
+    is_active: boolean;
+    logo_url?: string;
+}
+
 interface Profile {
     id?: string;
     full_name: string;
@@ -14,6 +25,7 @@ interface Profile {
     avatar_url: string;
     taglines: string[];
     social_links: any;
+    current_position?: CurrentPosition;
 }
 
 interface Skill {
@@ -35,6 +47,16 @@ export default function ProfileSkillsPage() {
     const [bio, setBio] = useState("");
     const [avatarUrl, setAvatarUrl] = useState("");
     const [taglines, setTaglines] = useState<string[]>([]);
+
+    // Current Position Form States
+    const [posRole, setPosRole] = useState("Quality Assurance Intern");
+    const [posCompany, setPosCompany] = useState("Jagoan Hosting (PT Beon Intermedia)");
+    const [posStatusType, setPosStatusType] = useState("Internship");
+    const [posLocation, setPosLocation] = useState("Malang, Indonesia");
+    const [posPeriod, setPosPeriod] = useState("2026 - Present");
+    const [posDescription, setPosDescription] = useState("Mengembangkan automated testing, manual regression testing, dan pengujian kualitas sistem di Jagoan Hosting.");
+    const [posIsActive, setPosIsActive] = useState(true);
+    const [savingPos, setSavingPos] = useState(false);
 
     // New/Edit Skill State
     const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
@@ -58,6 +80,17 @@ export default function ProfileSkillsPage() {
                 setBio(profileData.bio || "");
                 setAvatarUrl(profileData.avatar_url || "");
                 setTaglines(profileData.taglines || []);
+
+                if (profileData.current_position) {
+                    const pos = profileData.current_position;
+                    setPosRole(pos.role || "Quality Assurance Intern");
+                    setPosCompany(pos.company || "Jagoan Hosting (PT Beon Intermedia)");
+                    setPosStatusType(pos.status_type || "Internship");
+                    setPosLocation(pos.location || "Malang, Indonesia");
+                    setPosPeriod(pos.period || "2026 - Present");
+                    setPosDescription(pos.description || "");
+                    setPosIsActive(pos.is_active !== undefined ? pos.is_active : true);
+                }
             }
 
             if (skillsData) {
@@ -86,6 +119,28 @@ export default function ProfileSkillsPage() {
             alert("Error saving profile: " + error.message);
         } finally {
             setSaving(false);
+        }
+    };
+
+    const handleSaveCurrentPosition = async () => {
+        setSavingPos(true);
+        try {
+            const posData = {
+                role: posRole,
+                company: posCompany,
+                status_type: posStatusType,
+                location: posLocation,
+                period: posPeriod,
+                description: posDescription,
+                is_active: posIsActive,
+            };
+            const updated = await updateCurrentPosition(posData);
+            setProfile(updated);
+            alert("Current position updated successfully!");
+        } catch (error: any) {
+            alert("Error saving position: " + error.message);
+        } finally {
+            setSavingPos(false);
         }
     };
 
@@ -198,6 +253,96 @@ export default function ProfileSkillsPage() {
                             {saving ? "Saving..." : "Save Profile Changes"}
                         </button>
                     </div>
+                </div>
+            </section>
+
+            {/* --- CURRENT POSITION SECTION --- */}
+            <section className="bg-white dark:bg-zinc-900 p-6 rounded-xl border border-gray-200 dark:border-zinc-800 space-y-6">
+                <div className="flex items-center justify-between border-b border-gray-100 dark:border-zinc-800 pb-4">
+                    <h2 className="text-xl font-semibold dark:text-white">
+                        Posisi & Status Saat Ini (Current Position)
+                    </h2>
+                    <label className="flex items-center gap-2 cursor-pointer text-sm dark:text-gray-300">
+                        <input
+                            type="checkbox"
+                            checked={posIsActive}
+                            onChange={(e) => setPosIsActive(e.target.checked)}
+                            className="w-4 h-4 rounded border-gray-300 accent-blue-600"
+                        />
+                        <span>Tampilkan di Landing Page</span>
+                    </label>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium dark:text-gray-300">Role / Jabatan</label>
+                        <input
+                            type="text"
+                            placeholder="e.g. Quality Assurance Intern"
+                            value={posRole}
+                            onChange={(e) => setPosRole(e.target.value)}
+                            className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 dark:text-white"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium dark:text-gray-300">Perusahaan / Instansi</label>
+                        <input
+                            type="text"
+                            placeholder="e.g. Jagoan Hosting (PT Beon Intermedia)"
+                            value={posCompany}
+                            onChange={(e) => setPosCompany(e.target.value)}
+                            className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 dark:text-white"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium dark:text-gray-300">Jenis Status</label>
+                        <input
+                            type="text"
+                            placeholder="e.g. Internship, Full-time, Freelance"
+                            value={posStatusType}
+                            onChange={(e) => setPosStatusType(e.target.value)}
+                            className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 dark:text-white"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium dark:text-gray-300">Lokasi & Periode</label>
+                        <div className="grid grid-cols-2 gap-2">
+                            <input
+                                type="text"
+                                placeholder="e.g. Malang, Indonesia"
+                                value={posLocation}
+                                onChange={(e) => setPosLocation(e.target.value)}
+                                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 dark:text-white text-sm"
+                            />
+                            <input
+                                type="text"
+                                placeholder="e.g. 2026 - Present"
+                                value={posPeriod}
+                                onChange={(e) => setPosPeriod(e.target.value)}
+                                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 dark:text-white text-sm"
+                            />
+                        </div>
+                    </div>
+                    <div className="md:col-span-2 space-y-2">
+                        <label className="text-sm font-medium dark:text-gray-300">Deskripsi Ringkas Aktivitas</label>
+                        <textarea
+                            rows={3}
+                            placeholder="Deskripsi singkat tugas atau pengujian yang dilakukan..."
+                            value={posDescription}
+                            onChange={(e) => setPosDescription(e.target.value)}
+                            className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 dark:text-white"
+                        />
+                    </div>
+                </div>
+
+                <div className="flex justify-end pt-2">
+                    <button
+                        onClick={handleSaveCurrentPosition}
+                        disabled={savingPos}
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
+                    >
+                        {savingPos ? "Saving Position..." : "Save Position Changes"}
+                    </button>
                 </div>
             </section>
 

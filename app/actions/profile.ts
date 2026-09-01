@@ -40,11 +40,38 @@ export async function updateProfile(data: any) {
         const updated = await ProfileModel.findByIdAndUpdate(existing._id, updateData, { new: true }).lean();
         revalidatePath("/");
         revalidatePath("/about");
+        revalidatePath("/admin/dashboard/profile");
         return serialize(updated);
     } else {
         const newProfile = await ProfileModel.create(data);
         revalidatePath("/");
         revalidatePath("/about");
+        revalidatePath("/admin/dashboard/profile");
+        return serialize(newProfile);
+    }
+}
+
+export async function updateCurrentPosition(positionData: any) {
+    await connectToDatabase();
+    const existing = await ProfileModel.findOne();
+    if (existing) {
+        const updated = await ProfileModel.findByIdAndUpdate(
+            existing._id,
+            { current_position: positionData },
+            { new: true }
+        ).lean();
+        revalidatePath("/");
+        revalidatePath("/about");
+        revalidatePath("/admin/dashboard/profile");
+        return serialize(updated);
+    } else {
+        const newProfile = await ProfileModel.create({
+            full_name: "Abimanyu Priyo Widagdo",
+            current_position: positionData
+        });
+        revalidatePath("/");
+        revalidatePath("/about");
+        revalidatePath("/admin/dashboard/profile");
         return serialize(newProfile);
     }
 }
