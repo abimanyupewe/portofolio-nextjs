@@ -187,7 +187,7 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
             {/* Desktop Count */}
             <div className="hidden md:flex justify-between items-center mb-6">
               <p className="text-gray-500 dark:text-gray-400 text-sm">
-                Showing <span className="font-bold text-emerald-500">{filteredProjects.length}</span> projects
+                Showing <span className="font-bold text-black dark:text-white">{filteredProjects.length}</span> projects
               </p>
             </div>
 
@@ -226,7 +226,7 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
                                   isActive={currentPage === page}
                                   onClick={(e) => { e.preventDefault(); handlePageChange(page); }}
                                   className={cn(
-                                    currentPage === page && "bg-emerald-500 text-white hover:bg-emerald-600 border-none"
+                                    currentPage === page && "bg-black text-white dark:bg-white dark:text-black font-semibold border-none"
                                   )}
                                 >
                                   {page}
@@ -254,7 +254,7 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-20 text-center bg-gray-50 dark:bg-zinc-900/30 rounded-lg border border-dashed border-gray-200 dark:border-zinc-800">
-                <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/20 rounded-md flex items-center justify-center mb-4 text-emerald-500">
+                <div className="w-16 h-16 bg-gray-100 dark:bg-zinc-800 rounded-md flex items-center justify-center mb-4 text-black dark:text-white">
                   <Filter className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">No projects found</h3>
@@ -267,7 +267,7 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
                     setFilters([]);
                     setFiltersLanguage([]);
                   }}
-                  className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-md font-medium transition-colors"
+                  className="px-6 py-2 bg-black hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-gray-200 dark:text-black rounded-md font-semibold transition-colors"
                 >
                   Clear Filters
                 </button>

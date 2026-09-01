@@ -40,7 +40,7 @@ const Counter: React.FC<CounterProps> = ({ end, label }) => {
   return (
     <div className="flex items-center justify-center p-4 space-x-3">
       <motion.h2
-        className="text-5xl md:text-7xl font-black text-emerald-500 dark:text-emerald-400 tracking-tight"
+        className="text-5xl md:text-7xl font-heading font-black text-black dark:text-white tracking-tight"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}

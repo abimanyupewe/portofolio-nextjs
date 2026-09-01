@@ -17,7 +17,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="cursor-pointer bg-white dark:bg-zinc-900 rounded-lg shadow-xs border border-gray-100 dark:border-zinc-800 overflow-hidden hover:shadow-md hover:border-emerald-500/30 dark:hover:border-emerald-500/30 transition-all duration-300 group"
+      className="cursor-pointer bg-white dark:bg-zinc-900 rounded-lg shadow-xs border border-gray-100 dark:border-zinc-800 overflow-hidden hover:shadow-md hover:border-black/30 dark:hover:border-white/30 transition-all duration-300 group"
     >
       <div className="relative h-48 overflow-hidden">
         {displayImage ? (
@@ -34,7 +34,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
         )}
       </div>
       <div className="p-5">
-        <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-2">
+        <h3 className="font-heading font-semibold text-lg text-gray-900 dark:text-white mb-2">
           {project.title}
         </h3>
         <p className="line-clamp-2 text-gray-600 dark:text-gray-400 text-sm mb-3">

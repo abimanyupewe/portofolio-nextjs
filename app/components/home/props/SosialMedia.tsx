@@ -10,7 +10,7 @@ const SosialMedia = () => {
                 href="https://github.com/yourusername"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-violet-500 transition-all duration-300"
+                className="text-gray-600 hover:text-black dark:hover:text-white transition-all duration-300"
             >
                 <FaGithub size={24} />
             </a>
@@ -18,7 +18,7 @@ const SosialMedia = () => {
                 href="https://github.com/yourusername"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-violet-500 transition-all duration-300"
+                className="text-gray-600 hover:text-black dark:hover:text-white transition-all duration-300"
             >
                 <TbBrandDribbbleFilled size={24} />
             </a>
@@ -26,7 +26,7 @@ const SosialMedia = () => {
                 href="https://linkedin.com/in/yourusername"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-violet-500 transition-all duration-300"
+                className="text-gray-600 hover:text-black dark:hover:text-white transition-all duration-300"
             >
                 <FaLinkedin size={24} />
             </a>
@@ -34,7 +34,7 @@ const SosialMedia = () => {
                 href="https://instagram.com/yourusername"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-violet-500 transition-all duration-300"
+                className="text-gray-600 hover:text-black dark:hover:text-white transition-all duration-300"
             >
                 <FaInstagram size={24} />
             </a>
@@ -42,7 +42,7 @@ const SosialMedia = () => {
                 href="https://instagram.com/yourusername"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-violet-500 transition-all duration-300"
+                className="text-gray-600 hover:text-black dark:hover:text-white transition-all duration-300"
             >
                 <AiFillTikTok size={24} />
             </a>

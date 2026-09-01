@@ -29,7 +29,7 @@ export default function Error({
             <AlertCircle className="w-8 h-8" />
           </div>
         </div>
-        <h2 className="text-xl font-semibold mb-2">Something went wrong</h2>
+        <h2 className="text-xl font-heading font-semibold mb-2">Something went wrong</h2>
         <p className="text-zinc-500 dark:text-zinc-400 mb-8 text-sm">
           We've encountered an unexpected error. Please try again.
         </p>

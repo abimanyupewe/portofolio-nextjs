@@ -14,7 +14,7 @@ interface MySkilProps {
 const MySkil: React.FC<MySkilProps> = ({ title, skills }) => {
   return (
     <div>
-      <h3 className="text-xl font-semibold mb-4 text-gray-700">{title}</h3>
+      <h3 className="text-xl font-heading font-semibold mb-4 text-gray-700 dark:text-gray-300">{title}</h3>
       {skills.map((skill, index) => (
         <SkilBar key={index} name={skill.name} percentage={skill.percentage} />
       ))}

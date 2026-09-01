@@ -61,7 +61,7 @@ const Preloader = () => {
             <div className="absolute bottom-10 right-10 z-10">
                 <div
                     ref={textRef}
-                    className="text-6xl md:text-8xl font-black text-gray-900 dark:text-white leading-none tracking-tighter"
+                    className="text-6xl md:text-8xl font-heading font-black text-gray-900 dark:text-white leading-none tracking-tighter"
                 >
                     0%
                 </div>
@@ -71,7 +71,7 @@ const Preloader = () => {
             <div className="absolute bottom-0 left-0 w-full h-2 bg-gray-100 dark:bg-zinc-900 overflow-hidden">
                 <div
                     ref={progressLineRef}
-                    className="h-full bg-emerald-500 w-full origin-left"
+                    className="h-full bg-black dark:bg-white w-full origin-left"
                 />
             </div>
         </div>

@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Pixelify_Sans, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Preloader from "@/app/components/ui/Preloader";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
+const pixelifySans = Pixelify_Sans({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-plus-jakarta-sans",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-pixelify-sans",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-space-grotesk",
 });
 
 export const metadata: Metadata = {
@@ -21,10 +27,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${plusJakartaSans.className} antialiased`}>
+      <body className={`${pixelifySans.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
         <Preloader />
         {children}
       </body>
     </html>
   );
 }
+

@@ -12,8 +12,8 @@ export default function NotFound() {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="text-center"
       >
-        <h1 className="text-8xl font-bold tracking-tighter mb-4 text-zinc-200 dark:text-zinc-800">404</h1>
-        <h2 className="text-2xl font-medium tracking-tight mb-4">Page not found</h2>
+        <h1 className="text-8xl font-heading font-bold tracking-tighter mb-4 text-zinc-200 dark:text-zinc-800">404</h1>
+        <h2 className="text-2xl font-heading font-medium tracking-tight mb-4">Page not found</h2>
         <p className="text-zinc-500 dark:text-zinc-400 mb-8 max-w-sm mx-auto">
           The page you are looking for doesn't exist or has been moved.
         </p>

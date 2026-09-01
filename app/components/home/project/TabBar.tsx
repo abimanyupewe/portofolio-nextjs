@@ -15,8 +15,8 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab, setActiveTab }) => {
           key={index}
           onClick={() => setActiveTab(tab)}
           className={`p-3 rounded-md text-left transition-all duration-200 ${activeTab === tab
-              ? "bg-emerald-500 text-white shadow-xs dark:bg-emerald-600 font-medium"
-              : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-emerald-600 dark:hover:text-emerald-400"
+              ? "bg-black text-white dark:bg-white dark:text-black font-semibold shadow-xs"
+              : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-black dark:hover:text-white"
             }`}
         >
           {tab}

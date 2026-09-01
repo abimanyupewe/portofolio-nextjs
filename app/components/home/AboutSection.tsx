@@ -88,10 +88,10 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                     {/* Text Side */}
                     <div className="w-full md:w-2/3 space-y-6 text-center md:text-left">
                         <div>
-                            <h2 className="text-3xl md:text-4xl font-bold text-emerald-500 dark:text-emerald-400 mb-2 font-ubuntu uppercase tracking-wide">
+                            <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
                                 About Me
                             </h2>
-                            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-2 font-ubuntu">
+                            <h1 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-2">
                                 {profile?.full_name || "Abimanyu"}
                             </h1>
                         </div>
@@ -113,7 +113,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                             <div className="md:flex-wrap space-y-2 md:space-y-2 md:space-x-2 grid grid-cols-1 md:grid-cols-2">
                                 {/* Email */}
                                 <div className="flex items-center gap-3 bg-gray-50 dark:bg-zinc-900 w-fit p-2 pr-4 rounded-md border border-gray-100 dark:border-zinc-800">
-                                    <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-md text-emerald-600 dark:text-emerald-400">
+                                    <div className="p-2 bg-gray-100 dark:bg-zinc-800 rounded-md text-black dark:text-white">
                                         <Mail size={18} />
                                     </div>
                                     <span className="text-gray-700 dark:text-gray-300 font-medium select-all">abimanyupw369@gmail.com</span>
@@ -122,13 +122,13 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                                         className="ml-2 p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-md transition-colors text-gray-500 dark:text-gray-400"
                                         title="Copy Email"
                                     >
-                                        {copiedEmail ? <Check size={16} className="text-emerald-500" /> : <Copy size={16} />}
+                                        {copiedEmail ? <Check size={16} className="text-black dark:text-white" /> : <Copy size={16} />}
                                     </button>
                                 </div>
 
                                 {/* Phone */}
                                 <div className="flex items-center gap-3 bg-gray-50 dark:bg-zinc-900 w-fit p-2 pr-4 rounded-md border border-gray-100 dark:border-zinc-800">
-                                    <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-md text-emerald-600 dark:text-emerald-400">
+                                    <div className="p-2 bg-gray-100 dark:bg-zinc-800 rounded-md text-black dark:text-white">
                                         <Phone size={18} />
                                     </div>
                                     <span className="text-gray-700 dark:text-gray-300 font-medium select-all">+62 857-9145-7210</span>
@@ -137,13 +137,13 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                                         className="ml-2 p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-md transition-colors text-gray-500 dark:text-gray-400"
                                         title="Copy Phone"
                                     >
-                                        {copiedPhone ? <Check size={16} className="text-emerald-500" /> : <Copy size={16} />}
+                                        {copiedPhone ? <Check size={16} className="text-black dark:text-white" /> : <Copy size={16} />}
                                     </button>
                                 </div>
 
                                 {/* Whatsapp */}
                                 <div className="flex items-center gap-3 bg-gray-50 dark:bg-zinc-900 w-fit p-2 pr-4 rounded-md border border-gray-100 dark:border-zinc-800">
-                                    <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-md text-emerald-600 dark:text-emerald-400">
+                                    <div className="p-2 bg-gray-100 dark:bg-zinc-800 rounded-md text-black dark:text-white">
                                         <WhatsappIcon size={18} />
                                     </div>
                                     <span className="text-gray-700 dark:text-gray-300 font-medium select-all">+62 819-9671-9560</span>
@@ -152,7 +152,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                                         className="ml-2 p-1.5 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-md transition-colors text-gray-500 dark:text-gray-400"
                                         title="Copy Whatsapp"
                                     >
-                                        {copiedWhatsapp ? <Check size={16} className="text-emerald-500" /> : <Copy size={16} />}
+                                        {copiedWhatsapp ? <Check size={16} className="text-black dark:text-white" /> : <Copy size={16} />}
                                     </button>
                                 </div>
                             </div>

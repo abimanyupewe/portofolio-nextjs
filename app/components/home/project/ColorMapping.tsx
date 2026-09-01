@@ -18,22 +18,22 @@ interface BadgeProps {
 
 const colorMapping: ColorMapping = {
   categoryProject: {
-    Website: { bg: "bg-blue-100", text: "text-blue-800" },
-    App: { bg: "bg-green-100", text: "text-green-800" },
-    "UI/UX Design": { bg: "bg-purple-100", text: "text-purple-800" },
-    Fullstack: { bg: "bg-yellow-100", text: "text-yellow-800" },
+    Website: { bg: "bg-gray-100 dark:bg-zinc-800/80 border border-gray-200 dark:border-zinc-700", text: "text-gray-900 dark:text-gray-100 font-semibold" },
+    App: { bg: "bg-gray-100 dark:bg-zinc-800/80 border border-gray-200 dark:border-zinc-700", text: "text-gray-900 dark:text-gray-100 font-semibold" },
+    "UI/UX Design": { bg: "bg-gray-100 dark:bg-zinc-800/80 border border-gray-200 dark:border-zinc-700", text: "text-gray-900 dark:text-gray-100 font-semibold" },
+    Fullstack: { bg: "bg-gray-100 dark:bg-zinc-800/80 border border-gray-200 dark:border-zinc-700", text: "text-gray-900 dark:text-gray-100 font-semibold" },
   },
   language: {
-    JavaScript: { bg: "bg-yellow-100", text: "text-yellow-800" },
-    Python: { bg: "bg-blue-100", text: "text-blue-800" },
-    Dart: { bg: "bg-red-100", text: "text-red-800" },
-    TypeScript: { bg: "bg-purple-100", text: "text-purple-800" },
-    "Php Native": { bg: "bg-green-100", text: "text-green-800" },
+    JavaScript: { bg: "bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800", text: "text-gray-700 dark:text-gray-300" },
+    Python: { bg: "bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800", text: "text-gray-700 dark:text-gray-300" },
+    Dart: { bg: "bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800", text: "text-gray-700 dark:text-gray-300" },
+    TypeScript: { bg: "bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800", text: "text-gray-700 dark:text-gray-300" },
+    "Php Native": { bg: "bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800", text: "text-gray-700 dark:text-gray-300" },
   },
   status: {
-    Selesai: { bg: "bg-green-100", text: "text-green-800" },
-    Progres: { bg: "bg-yellow-100", text: "text-yellow-800" },
-    Kolaborasi: { bg: "bg-purple-100", text: "text-purple-800" },
+    Selesai: { bg: "bg-black dark:bg-white", text: "text-white dark:text-black font-semibold" },
+    Progres: { bg: "bg-gray-200 dark:bg-zinc-700", text: "text-gray-900 dark:text-gray-100" },
+    Kolaborasi: { bg: "bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-600", text: "text-gray-800 dark:text-gray-200" },
   },
 };
 
@@ -46,8 +46,8 @@ const Badge: React.FC<BadgeProps> = ({ type, value }) => {
       {values.map((val, index) => {
         // Get colors from colorMapping based on type and value
         const colors = colorMapping[type]?.[val] || {
-          bg: "bg-gray-100",
-          text: "text-gray-800",
+          bg: "bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700",
+          text: "text-gray-800 dark:text-gray-200",
         };
 
         return (

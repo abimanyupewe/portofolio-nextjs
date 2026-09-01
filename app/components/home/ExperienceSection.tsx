@@ -22,7 +22,7 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ experiences = [] 
     content: (
       <div>
         <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">{exp.company}</h3>
-        <p className="text-sm font-medium text-emerald-500 mb-4">{exp.position}</p>
+        <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4">{exp.position}</p>
         <p className="mb-8 text-xs font-normal text-neutral-800 md:text-base dark:text-neutral-200">
           {exp.description}
         </p>

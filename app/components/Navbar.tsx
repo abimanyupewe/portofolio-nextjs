@@ -38,7 +38,7 @@ const Navbar = (props: Props) => {
         }`}
     >
       <Link href="/">
-        <h1 className="text-3xl text-emerald-500 font-bold">hi</h1>
+        <h1 className="text-3xl text-black dark:text-white font-heading font-bold">hi</h1>
       </Link>
 
       {/* Menu Desktop */}
@@ -141,8 +141,8 @@ const Navbar = (props: Props) => {
           <div className="mt-8 pt-8 border-t border-gray-100 dark:border-zinc-800">
             <p className="mb-6 text-sm font-semibold text-gray-400 uppercase tracking-wider">Socials</p>
             <div className="flex flex-col space-y-4">
-              <Link href="https://www.linkedin.com/in/abimanyu-priyo-widagdo-101a46279/" target="_blank" className="text-xl font-medium text-gray-500 hover:text-blue-600 transition-colors">LinkedIn</Link>
-              <Link href="https://www.instagram.com/hoohbim_" target="_blank" className="text-xl font-medium text-gray-500 hover:text-pink-600 transition-colors">Instagram</Link>
+              <Link href="https://www.linkedin.com/in/abimanyu-priyo-widagdo-101a46279/" target="_blank" className="text-xl font-medium text-gray-500 hover:text-black dark:hover:text-white transition-colors">LinkedIn</Link>
+              <Link href="https://www.instagram.com/hoohbim_" target="_blank" className="text-xl font-medium text-gray-500 hover:text-black dark:hover:text-white transition-colors">Instagram</Link>
               <Link href="https://www.tiktok.com/@abimanyupriyowidagdo?is_from_webapp=1&sender_device=pc" target="_blank" className="text-xl font-medium text-gray-500 hover:text-black dark:hover:text-white transition-colors">TikTok</Link>
               <Link href="https://github.com/abimanyupewe" target="_blank" className="text-xl font-medium text-gray-500 hover:text-black dark:hover:text-white transition-colors">Github</Link>
             </div>

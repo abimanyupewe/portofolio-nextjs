@@ -13,8 +13,8 @@ const Footer = (props: Props) => {
           {/* Brand Column */}
           <div className="space-y-4">
             <Link href="#home" className="inline-block">
-              <h1 className="text-2xl font-bold text-black dark:text-white">
-                Abimanyu<span className="text-emerald-500">.</span>
+              <h1 className="text-2xl font-heading font-bold text-black dark:text-white">
+                Abimanyu<span className="text-gray-400">.</span>
               </h1>
             </Link>
             <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed max-w-xs">
@@ -49,7 +49,7 @@ const Footer = (props: Props) => {
             <ul className="space-y-3 text-sm text-neutral-600 dark:text-neutral-400">
               <li className="flex items-start gap-3">
                 <span className="font-medium text-black dark:text-white">Email:</span>
-                <a href="mailto:abimanyupw369@gmail.com" className="hover:text-emerald-500 transition-colors">
+                <a href="mailto:abimanyupw369@gmail.com" className="hover:text-black dark:hover:text-white transition-colors">
                   abimanyupw369@gmail.com
                 </a>
               </li>
@@ -86,7 +86,7 @@ const FooterLink = ({ href, children }: { href: string; children: React.ReactNod
   <li>
     <Link
       href={href}
-      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors duration-200"
+      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors duration-200"
     >
       {children}
     </Link>
@@ -99,7 +99,7 @@ const SocialLink = ({ href, icon, label }: { href: string; icon: React.ReactNode
     aria-label={label}
     target="_blank"
     rel="noopener noreferrer"
-    className="text-neutral-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors duration-200 transform hover:scale-110"
+    className="text-neutral-400 hover:text-black dark:hover:text-white transition-colors duration-200 transform hover:scale-110"
   >
     {icon}
   </a>

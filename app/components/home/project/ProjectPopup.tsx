@@ -74,7 +74,7 @@ const ProjectPopup: React.FC<ProjectPopupProps> = ({ project, onClose }) => {
         </div>
 
         {/* Project Title */}
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+        <h2 className="text-3xl font-heading font-bold text-gray-900 dark:text-white mb-3">
           {project.title}
         </h2>
 
@@ -135,7 +135,7 @@ const ProjectPopup: React.FC<ProjectPopupProps> = ({ project, onClose }) => {
               href={project.preview_link}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-md transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+              className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-black hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-gray-200 dark:text-black font-semibold rounded-md transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5"
             >
               <ExternalLink className="w-5 h-5 mr-2" />
               View Live Preview

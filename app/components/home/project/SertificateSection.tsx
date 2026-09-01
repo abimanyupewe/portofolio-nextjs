@@ -47,7 +47,7 @@ const SertificateSection: React.FC<SertificateSectionProps> = ({ certificates = 
             </span>
         ),
         content: (
-            <div className="h-full w-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white relative overflow-hidden rounded-md group cursor-pointer"
+            <div className="h-full w-full bg-gradient-to-br from-zinc-800 to-black dark:from-zinc-900 dark:to-zinc-950 border border-zinc-800 flex items-center justify-center text-white relative overflow-hidden rounded-md group cursor-pointer"
                 onClick={() => cert.credential_url && window.open(cert.credential_url, '_blank')}
             >
                 {cert.image_url ? (
@@ -59,8 +59,8 @@ const SertificateSection: React.FC<SertificateSectionProps> = ({ certificates = 
                     />
                 ) : (
                     <div className="text-center p-4">
-                        <p className="text-xl font-bold text-white">{cert.title}</p>
-                        <p className="text-sm mt-2 text-emerald-100">{cert.issuer}</p>
+                        <p className="text-xl font-heading font-bold text-white">{cert.title}</p>
+                        <p className="text-sm mt-2 text-neutral-300">{cert.issuer}</p>
                         {cert.credential_url && (
                             <span className="mt-4 inline-block text-xs bg-white/20 hover:bg-white/30 px-3 py-1 rounded-md transition-colors">View Credential</span>
                         )}
@@ -73,8 +73,8 @@ const SertificateSection: React.FC<SertificateSectionProps> = ({ certificates = 
     return (
         <div className="w-full py-10 bg-white dark:bg-black transition-colors duration-300">
             <div className="flex flex-col items-center mb-16 px-4">
-                <h2 className="text-3xl md:text-5xl font-bold dark:text-white text-black mb-6 text-center">
-                    MY <span className="text-emerald-500">CERTIFICATES</span>
+                <h2 className="text-3xl md:text-5xl font-heading font-bold dark:text-white text-black mb-6 text-center">
+                    MY <span className="text-gray-500 dark:text-gray-400">CERTIFICATES</span>
                 </h2>
                 <p className="text-neutral-600 dark:text-neutral-400 max-w-lg text-center text-sm md:text-base leading-relaxed">
                     Validations of my skills and achievements throughout my professional journey.

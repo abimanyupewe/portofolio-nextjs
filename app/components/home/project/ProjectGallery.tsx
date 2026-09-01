@@ -60,7 +60,7 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ images, title }) => {
                 onClick={() => setMainImage(image)}
                 className={`relative w-20 h-14 cursor-pointer rounded-md overflow-hidden bg-gray-100 border-2 transition-all duration-200 hover:shadow-md flex-shrink-0 ${
                   mainImage === image
-                    ? "border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs"
+                    ? "border-black dark:border-white ring-2 ring-black/20 dark:ring-white/20 shadow-xs"
                     : "border-gray-200 hover:border-gray-300 dark:border-zinc-800"
                 }`}
               >
@@ -83,7 +83,7 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ images, title }) => {
               onClick={() => setMainImage(image)}
               className={`relative w-full h-16 cursor-pointer rounded-md overflow-hidden bg-gray-100 border-2 transition-all duration-200 hover:shadow-md flex-shrink-0 ${
                 mainImage === image
-                  ? "border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs"
+                  ? "border-black dark:border-white ring-2 ring-black/20 dark:ring-white/20 shadow-xs"
                   : "border-gray-200 hover:border-gray-300 dark:border-zinc-800"
               }`}
             >
