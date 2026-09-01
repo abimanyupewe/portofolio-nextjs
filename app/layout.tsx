@@ -1,18 +1,27 @@
 import type { Metadata } from "next";
-import { Pixelify_Sans, Space_Grotesk } from "next/font/google";
+import { Syne, Space_Grotesk, Indie_Flower } from "next/font/google";
 import "./globals.css";
 import Preloader from "@/app/components/ui/Preloader";
 
-const pixelifySans = Pixelify_Sans({
+const syne = Syne({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-pixelify-sans",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-syne",
+  display: "swap",
 });
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+const indieFlower = Indie_Flower({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-indie-flower",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -27,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${pixelifySans.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
+      <body className={`${syne.variable} ${spaceGrotesk.variable} ${indieFlower.variable} font-sans antialiased`}>
         <Preloader />
         {children}
       </body>

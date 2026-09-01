@@ -20,10 +20,10 @@ interface HeroSectionProps {
  * Hero Section — Centered Typographic Layout (Opsi A)
  *
  * Layout minimalis centered dengan hierarki:
- * Nama (2 baris, "ABIM" highlighted) → FlipWords Tagline → 2 CTA Buttons
+ * Nama (2 baris, "ABIM" highlighted with smooth SVG stroke draw animation) → FlipWords Tagline → 2 CTA Buttons
  *
  * Background: clean solid (no grid pattern)
- * Animation: GSAP stagger timeline
+ * Animation: GSAP stagger timeline + SVG stroke draw loop
  */
 const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,7 +42,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
   const nameParts = fullName.split(" ");
   const restName = nameParts.slice(1).join(" ");
 
-  const underlineRef = useRef<SVGSVGElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
 
   useGSAP(
     () => {
@@ -72,21 +72,34 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
           "-=0.3"
         );
 
-      // Infinite loop animation untuk underline (Draw-in -> Hold -> Wipe-out -> Repeat)
-      const underlineTl = gsap.timeline({ repeat: -1, repeatDelay: 0.5 });
-      underlineTl
-        .fromTo(
-          underlineRef.current,
-          { scaleX: 0, transformOrigin: "left center" },
-          { scaleX: 1, duration: 1.2, ease: "power2.inOut" }
-        )
-        .to(underlineRef.current, {
-          scaleX: 0,
-          duration: 0.8,
-          ease: "power2.inOut",
-          transformOrigin: "right center",
-          delay: 2,
+      // Clean SVG Underline Stroke Draw & Erase Loop Animation
+      if (pathRef.current) {
+        const pathLength = pathRef.current.getTotalLength() || 100;
+
+        // Set initial stroke dash setup
+        gsap.set(pathRef.current, {
+          strokeDasharray: pathLength,
+          strokeDashoffset: pathLength,
         });
+
+        const underlineTl = gsap.timeline({ repeat: -1, repeatDelay: 0.8 });
+
+        underlineTl
+          // 1. Draw line smoothly from left to right
+          .to(pathRef.current, {
+            strokeDashoffset: 0,
+            duration: 1.4,
+            ease: "power2.inOut",
+          })
+          // 2. Hold line visible for 2.5 seconds
+          .to({}, { duration: 2.5 })
+          // 3. Erase line smoothly from left to right
+          .to(pathRef.current, {
+            strokeDashoffset: -pathLength,
+            duration: 1.2,
+            ease: "power2.inOut",
+          });
+      }
     },
     { scope: containerRef }
   );
@@ -98,23 +111,23 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
     >
       <div className="w-full max-w-4xl mx-auto px-6 md:px-8">
         <div className="text-center space-y-8">
-          {/* Name — 2 lines, "ABIM" highlighted with animated underline */}
+          {/* Name — 2 lines, "ABIM" highlighted with SVG draw animation */}
           <h1
             ref={nameRef}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black uppercase tracking-tighter text-black dark:text-white leading-[0.9]"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-draw font-bold uppercase tracking-tighter text-black dark:text-white leading-[0.9]"
           >
             <span className="block">
               <span className="relative inline-block group cursor-default">
                 <span>ABIM</span>
-                {/* Animated Wavy/Sleek Underline */}
+                {/* SVG Underline Path */}
                 <svg
-                  ref={underlineRef}
                   className="absolute -bottom-2 left-0 w-full h-3 text-black dark:text-white overflow-visible"
                   viewBox="0 0 100 12"
                   fill="none"
                   preserveAspectRatio="none"
                 >
                   <path
+                    ref={pathRef}
                     d="M 0 6 Q 25 1, 50 6 T 100 6"
                     stroke="currentColor"
                     strokeWidth="3.5"
