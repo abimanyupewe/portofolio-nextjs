@@ -55,7 +55,6 @@ export default function ProfileSkillsPage() {
     const [posLocation, setPosLocation] = useState("Malang, Indonesia");
     const [posPeriod, setPosPeriod] = useState("2026 - Present");
     const [posDescription, setPosDescription] = useState("Mengembangkan automated testing, manual regression testing, dan pengujian kualitas sistem di Jagoan Hosting.");
-    const [posIsActive, setPosIsActive] = useState(true);
     const [savingPos, setSavingPos] = useState(false);
 
     // New/Edit Skill State
@@ -89,7 +88,6 @@ export default function ProfileSkillsPage() {
                     setPosLocation(pos.location || "Malang, Indonesia");
                     setPosPeriod(pos.period || "2026 - Present");
                     setPosDescription(pos.description || "");
-                    setPosIsActive(pos.is_active !== undefined ? pos.is_active : true);
                 }
             }
 
@@ -132,7 +130,7 @@ export default function ProfileSkillsPage() {
                 location: posLocation,
                 period: posPeriod,
                 description: posDescription,
-                is_active: posIsActive,
+                is_active: true,
             };
             const updated = await updateCurrentPosition(posData);
             setProfile(updated);
@@ -258,19 +256,10 @@ export default function ProfileSkillsPage() {
 
             {/* --- CURRENT POSITION SECTION --- */}
             <section className="bg-white dark:bg-zinc-900 p-6 rounded-xl border border-gray-200 dark:border-zinc-800 space-y-6">
-                <div className="flex items-center justify-between border-b border-gray-100 dark:border-zinc-800 pb-4">
+                <div className="border-b border-gray-100 dark:border-zinc-800 pb-4">
                     <h2 className="text-xl font-semibold dark:text-white">
                         Posisi & Status Saat Ini (Current Position)
                     </h2>
-                    <label className="flex items-center gap-2 cursor-pointer text-sm dark:text-gray-300">
-                        <input
-                            type="checkbox"
-                            checked={posIsActive}
-                            onChange={(e) => setPosIsActive(e.target.checked)}
-                            className="w-4 h-4 rounded border-gray-300 accent-blue-600"
-                        />
-                        <span>Tampilkan di Landing Page</span>
-                    </label>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
