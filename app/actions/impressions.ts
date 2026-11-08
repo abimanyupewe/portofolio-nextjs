@@ -68,21 +68,25 @@ export async function createImpression(input: {
     if (company.length > 80 || division.length > 80) return { ok: false, error: "Company/division is too long (max 80)." };
     if (message.length < 10 || message.length > 500) return { ok: false, error: "Impression must be 10–500 characters." };
 
-    const ip_hash = await visitorHash();
-    await connectToDatabase();
-    const recent = await ImpressionModel.countDocuments({ ip_hash, created_at: { $gt: new Date(Date.now() - HOUR) } });
-    if (recent >= MAX_PER_HOUR) return { ok: false, error: "Thanks! Please come back a bit later." };
+    try {
+        const ip_hash = await visitorHash();
+        await connectToDatabase();
+        const recent = await ImpressionModel.countDocuments({ ip_hash, created_at: { $gt: new Date(Date.now() - HOUR) } });
+        if (recent >= MAX_PER_HOUR) return { ok: false, error: "Thanks! Please come back a bit later." };
 
-    const doc = await ImpressionModel.create({
-        name,
-        company: company || undefined,
-        division: division || undefined,
-        message,
-        ip_hash,
-    });
-    revalidatePath("/");
-    revalidatePath("/impressions");
-    return { ok: true, item: toItem(doc.toObject()) };
+        const doc = await ImpressionModel.create({
+            name,
+            company: company || undefined,
+            division: division || undefined,
+            message,
+            ip_hash,
+        });
+        revalidatePath("/");
+        revalidatePath("/impressions");
+        return { ok: true, item: toItem(doc.toObject()) };
+    } catch {
+        return { ok: false, error: "Unable to save your impression right now. Please try again." };
+    }
 }
 
 // One like per visitor; returns the new total.

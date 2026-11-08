@@ -1,9 +1,10 @@
 "use client";
 
 import { FlipWords } from "@/components/ui/ui/flip-words";
-import { Spotlight } from "@/components/ui/spotlight";
+import LetterGlitch from "@/components/LetterGlitch";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import Link from "next/link";
@@ -21,10 +22,14 @@ interface HeroSectionProps {
 
 /**
  * Hero Section — Centered editorial (charcoal + cream)
- * Spotlight background → serif name (TextGenerateEffect) → FlipWords tagline → CTA
+ * LetterGlitch (React Bits) background → serif name (TextGenerateEffect) → FlipWords tagline → CTA
  */
 const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
   const containerRef = useRef<HTMLElement>(null);
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const dark = resolvedTheme !== "light";
 
   const defaultWords = ["Web Development", "App Development", "UI/UX Design"];
   const words =
@@ -51,18 +56,27 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
   return (
     <section
       ref={containerRef}
-      className="relative h-screen w-full overflow-hidden bg-background flex items-center justify-center transition-colors duration-300"
+      className="relative min-h-screen w-full overflow-hidden bg-background flex items-center justify-center py-28 transition-colors duration-300"
     >
-      <Spotlight
-        className="-top-40 left-0 md:left-60 md:-top-20 text-black dark:text-white"
-        fill="currentColor"
-      />
+      {/* key remounts the canvas when the theme flips; render after mount to avoid SSR/theme mismatch */}
+      {mounted && (
+        <div
+          key={dark ? "dark" : "light"}
+          aria-hidden
+          className="pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black_65%,transparent)]"
+        >
+          <LetterGlitch
+            lightMode={!dark}
+            glitchColors={dark ? ["#efe8da", "#8a8478"] : ["#1c1c1c", "#6f6a60"]}
+            baseColor={dark ? "#efe8da" : "#1c1c1c"}
+            baseOpacity={0.1}
+            centerFade={0.6}
+            edgeFade={0.3}
+          />
+        </div>
+      )}
 
       <div className="relative z-10 w-full max-w-4xl mx-auto px-6 md:px-8 text-center space-y-8">
-        <p className="hero-fade font-sans text-xs uppercase tracking-[0.3em] text-muted-foreground">
-          Portfolio
-        </p>
-
         {/* TextGenerateEffect renders divs/spans per word; keep a real h1 for SEO & screen readers */}
         <h1 className="sr-only">{fullName}</h1>
         <div aria-hidden>

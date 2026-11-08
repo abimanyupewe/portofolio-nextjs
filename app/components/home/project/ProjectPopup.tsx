@@ -17,6 +17,7 @@ export interface ProjectType {
   created_at?: string; // Supabase field
   preview_link?: string;
   repo_link?: string;
+  show_in_public_contributions?: boolean;
   thumbnail_url?: string;
   gallery_urls?: string[];
   // Legacy support for local data (temporary)

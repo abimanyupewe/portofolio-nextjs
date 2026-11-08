@@ -49,10 +49,11 @@ const ImpressionCard = ({ item }: { item: ImpressionItem }) => {
           liked={liked}
           count={count}
           onChange={onChange}
-          size={36}
+          size={16}
+          corner={999}
           likedColor="var(--foreground)"
           idleColor="var(--muted-foreground)"
-          pillColor="var(--muted)"
+          pillColor="transparent"
           textColor="var(--foreground)"
           label={`Like impression from ${item.name}`}
         />

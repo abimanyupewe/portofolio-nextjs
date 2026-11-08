@@ -9,10 +9,8 @@ import AboutSection from "@/app/components/home/AboutSection";
 import PlaygroundNote from "@/app/components/home/PlaygroundNote";
 import { getNotes } from "@/app/actions/notes";
 import ImpressionsSection from "@/app/components/home/impressions/ImpressionsSection";
-import CompaniesSection from "@/app/components/home/CompaniesSection";
 import MatrixTrailSection from "@/app/components/home/MatrixTrailSection";
 import { getImpressions, countImpressions } from "@/app/actions/impressions";
-import { getCompanies } from "@/app/actions/companies";
 import FaqSection from "@/app/components/home/FaqSection";
 import { getFaqs } from "@/app/actions/faqs";
 import connectToDatabase from "@/lib/mongodb";
@@ -24,6 +22,7 @@ import SkillModel from "@/models/Skill";
 import { jsonLdScript, personJsonLd } from "@/lib/seo";
 import { getPublishedBlogs } from "@/app/actions/blogs";
 import BlogSection from "@/app/components/home/BlogSection";
+import PublicContributionsSection from "@/app/components/home/PublicContributionsSection";
 
 export const revalidate = 0; // Force dynamic for debugging/real-time
 
@@ -51,7 +50,7 @@ export default async function Home() {
   await connectToDatabase();
 
   // Fetch all data from MongoDB in parallel
-  const [projectsRaw, profileRaw, experiencesRaw, certificatesRaw, skillsRaw, notes, impressions, impressionTotal, companies, faqs, blogs] = await Promise.all([
+  const [projectsRaw, profileRaw, experiencesRaw, certificatesRaw, skillsRaw, notes, impressions, impressionTotal, faqs, blogs] = await Promise.all([
     ProjectModel.find({}).sort({ created_at: -1 }).lean(),
     ProfileModel.findOne().lean(),
     ExperienceModel.find({}).sort({ created_at: -1 }).lean(),
@@ -60,7 +59,6 @@ export default async function Home() {
     getNotes(),
     getImpressions(6),
     countImpressions(),
-    getCompanies(),
     getFaqs(),
     getPublishedBlogs(),
   ]);
@@ -86,10 +84,10 @@ export default async function Home() {
       <AboutSection profile={profile || null} />
       {/* Pass data to Project component */}
       <Project initialProjects={projects || []} />
+      <PublicContributionsSection projects={projects || []} />
       <BlogSection blogs={blogs || []} />
       <ExperienceSection experiences={experiences || []} />
       <ImpressionsSection initialItems={impressions} total={impressionTotal} />
-      <CompaniesSection companies={companies} />
       <FaqSection faqs={faqs} />
       <PlaygroundNote initialNotes={notes} />
       <MatrixTrailSection />

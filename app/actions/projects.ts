@@ -51,7 +51,11 @@ export async function updateProject(id: string, data: any) {
     await connectToDatabase();
     // Remove _id from data if present to avoid error
     const { _id, ...updateData } = data;
-    const project = await ProjectModel.findByIdAndUpdate(id, updateData, { new: true }).lean();
+    const project = await ProjectModel.findByIdAndUpdate(
+        id,
+        { $set: updateData },
+        { new: true, runValidators: true, strict: false }
+    ).lean();
     revalidatePath("/admin/dashboard/projects");
     revalidatePath("/");
     return serialize(project);

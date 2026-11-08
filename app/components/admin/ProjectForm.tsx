@@ -26,6 +26,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData }) => {
     language: initialData?.language || [],
     preview_link: initialData?.preview_link || "",
     repo_link: initialData?.repo_link || "",
+    show_in_public_contributions: initialData?.show_in_public_contributions || false,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -228,6 +229,19 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData }) => {
             <p className="text-sm text-blue-600/70 dark:text-blue-400/70 mb-4">
               Make sure all details are correct before publishing.
             </p>
+            <label htmlFor="show-in-public-contributions" className="mb-5 flex items-start gap-3 text-sm text-blue-900 dark:text-blue-100">
+              <input
+                id="show-in-public-contributions"
+                type="checkbox"
+                checked={formData.show_in_public_contributions}
+                onChange={(e) => setFormData({ ...formData, show_in_public_contributions: e.target.checked })}
+                className="mt-0.5 size-4 accent-blue-600"
+              />
+              <span>
+                <span className="block font-medium">Show in Public Contributions</span>
+                <span className="mt-1 block text-xs text-blue-700/70 dark:text-blue-200/70">Display this project in the public links grid.</span>
+              </span>
+            </label>
             <button
               type="submit"
               disabled={loading}

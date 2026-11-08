@@ -38,13 +38,18 @@ const ImpressionModal = ({ open, onClose, onCreated }: Props) => {
 
   const send = async () => {
     setError(null);
-    const res = await createImpression({ name, company, division, message, honeypot });
-    if (!res.ok) {
-      setError(res.error);
+    try {
+      const res = await createImpression({ name, company, division, message, honeypot });
+      if (!res.ok) {
+        setError(res.error);
+        return false;
+      }
+      created.current = res.item;
+      return true;
+    } catch {
+      setError("Unable to send your impression right now. Please try again.");
       return false;
     }
-    created.current = res.item;
-    return true;
   };
 
   // Close only after the plane has flown, then hand the new card to the list.
@@ -115,7 +120,10 @@ const ImpressionModal = ({ open, onClose, onCreated }: Props) => {
                   aria-label="Your impression"
                   required
                 />
-                <p className="mt-1 text-right text-xs text-muted-foreground">{message.length}/500</p>
+                <p className="mt-1 flex justify-between text-xs text-muted-foreground">
+                  <span>{message.length > 0 && message.trim().length < 10 ? "Minimum 10 characters" : " "}</span>
+                  <span>{message.length}/500</span>
+                </p>
               </div>
               {error && (
                 <p role="alert" className="text-sm text-destructive">
@@ -123,7 +131,7 @@ const ImpressionModal = ({ open, onClose, onCreated }: Props) => {
                 </p>
               )}
               <div className="flex justify-end pt-2">
-                <PaperPlaneSend onSend={send} onSent={done} disabled={name.trim().length < 2 || message.trim().length < 10} />
+                <PaperPlaneSend onSend={send} onSent={done} disabled={!name.trim() || !message.trim()} />
               </div>
             </form>
           </motion.div>
