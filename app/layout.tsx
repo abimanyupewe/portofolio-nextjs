@@ -26,8 +26,8 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
-  title: "Abimanyu — Fullstack Developer & QA Engineer",
-  description: "Portfolio of Abimanyu, a fullstack developer and QA engineer.",
+  title: "Abimanyu Priyo Widagdo — Fullstack Developer & QA Engineer",
+  description: "Fullstack developer and QA engineer based in Malang, Indonesia. I build web and mobile apps, design interfaces, and test software quality.",
   icons: {
     icon: "/icon.png",
     shortcut: "/icon.png",
@@ -37,15 +37,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "/",
-    title: "Abimanyu — Fullstack Developer & QA Engineer",
-    description: "Portfolio of Abimanyu, a fullstack developer and QA engineer.",
+    title: "Abimanyu Priyo Widagdo — Fullstack Developer & QA Engineer",
+    description: "Fullstack developer and QA engineer based in Malang, Indonesia. I build web and mobile apps, design interfaces, and test software quality.",
     siteName: "Abimanyu",
     images: [{ url: "/icon.png", alt: "Abimanyu manga portrait" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abimanyu — Fullstack Developer & QA Engineer",
-    description: "Portfolio of Abimanyu, a fullstack developer and QA engineer.",
+    title: "Abimanyu Priyo Widagdo — Fullstack Developer & QA Engineer",
+    description: "Fullstack developer and QA engineer based in Malang, Indonesia. I build web and mobile apps, design interfaces, and test software quality.",
     images: ["/icon.png"],
   },
   verification: process.env.NEXT_PUBLIC_GSC_VERIFICATION
