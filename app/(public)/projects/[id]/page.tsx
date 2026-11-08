@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Github } from "lucide-react";
 import { getProject, getProjects } from "@/app/actions/projects";
 import ProjectShowcase from "@/app/components/home/project/ProjectShowcase";
+import { absoluteUrl, jsonLdScript, personJsonLd } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -26,7 +27,20 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
     title: `${project.title} | Abimanyu`,
     description: project.description,
-    openGraph: { title: project.title, description: project.description, images: project.thumbnail_url ? [project.thumbnail_url] : [] },
+    alternates: { canonical: `/projects/${project.id}` },
+    openGraph: {
+      type: "article",
+      url: `/projects/${project.id}`,
+      title: project.title,
+      description: project.description,
+      images: project.thumbnail_url ? [{ url: project.thumbnail_url, alt: project.title }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title,
+      description: project.description,
+      images: project.thumbnail_url ? [project.thumbnail_url] : undefined,
+    },
   };
 }
 
@@ -48,6 +62,16 @@ export default async function ProjectDetailPage({ params }: Params) {
   const live = real(project.preview_link);
   const repo = real(project.repo_link);
 
+  const projectJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    description: project.description,
+    image: project.thumbnail_url ? absoluteUrl(project.thumbnail_url) : undefined,
+    url: absoluteUrl(`/projects/${project.id}`),
+    author: personJsonLd,
+  };
+
   const meta = [
     { label: "Status", value: project.status?.join(", ") },
     { label: "Language", value: project.language?.join(", ") },
@@ -56,6 +80,7 @@ export default async function ProjectDetailPage({ params }: Params) {
 
   return (
     <article className="container mx-auto max-w-5xl px-4 pb-24 pt-32 md:px-8">
+      <script {...jsonLdScript(projectJsonLd)} />
       <Link
         href="/#project"
         className="mb-10 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"

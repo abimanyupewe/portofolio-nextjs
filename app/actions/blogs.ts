@@ -29,6 +29,18 @@ export async function getBlogs() {
     return serialize(blogs);
 }
 
+export async function getPublishedBlogs() {
+    await connectToDatabase();
+    const blogs = await BlogModel.find({ published: true }).sort({ created_at: -1 }).lean();
+    return serialize(blogs);
+}
+
+export async function getBlogBySlug(slug: string) {
+    await connectToDatabase();
+    const blog = await BlogModel.findOne({ slug, published: true }).lean();
+    return serialize(blog);
+}
+
 export async function getBlog(id: string) {
     await connectToDatabase();
     const blog = await BlogModel.findById(id).lean();
@@ -40,6 +52,7 @@ export async function createBlog(data: any) {
     const newBlog = await BlogModel.create(data);
     revalidatePath("/admin/dashboard/blogs");
     revalidatePath("/");
+    revalidatePath("/blog");
     return serialize(newBlog);
 }
 
@@ -49,6 +62,8 @@ export async function updateBlog(id: string, data: any) {
     const blog = await BlogModel.findByIdAndUpdate(id, updateData, { new: true }).lean();
     revalidatePath("/admin/dashboard/blogs");
     revalidatePath("/");
+    revalidatePath("/blog");
+    if (blog?.slug) revalidatePath(`/blog/${blog.slug}`);
     return serialize(blog);
 }
 
@@ -57,5 +72,6 @@ export async function deleteBlog(id: string) {
     await BlogModel.findByIdAndDelete(id);
     revalidatePath("/admin/dashboard/blogs");
     revalidatePath("/");
+    revalidatePath("/blog");
     return { success: true };
 }

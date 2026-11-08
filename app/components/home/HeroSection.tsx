@@ -21,7 +21,7 @@ interface HeroSectionProps {
 
 /**
  * Hero Section — Centered editorial (charcoal + cream)
- * Spotlight (Aceternity) → serif name (TextGenerateEffect) → FlipWords tagline → CTA
+ * Spotlight background → serif name (TextGenerateEffect) → FlipWords tagline → CTA
  */
 const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
   const containerRef = useRef<HTMLElement>(null);
@@ -53,7 +53,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
       ref={containerRef}
       className="relative h-screen w-full overflow-hidden bg-background flex items-center justify-center transition-colors duration-300"
     >
-      {/* fill=currentColor: charcoal glow in light mode, cream glow in dark mode */}
       <Spotlight
         className="-top-40 left-0 md:left-60 md:-top-20 text-black dark:text-white"
         fill="currentColor"

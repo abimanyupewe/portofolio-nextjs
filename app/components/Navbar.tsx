@@ -138,6 +138,13 @@ const Navbar = (props: Props) => {
           >
             About
           </Link>
+          <Link
+            className="text-2xl font-semibold text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
+            onClick={() => setVisible(false)}
+            href="/blog"
+          >
+            Blog
+          </Link>
 
           <div className="mt-8 pt-8 border-t border-gray-100 dark:border-zinc-800">
             <p className="mb-6 text-sm font-semibold text-gray-400 uppercase tracking-wider">Socials</p>

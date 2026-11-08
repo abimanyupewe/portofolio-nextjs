@@ -21,6 +21,9 @@ import ProfileModel from "@/models/Profile";
 import ExperienceModel from "@/models/Experience";
 import CertificateModel from "@/models/Certificate";
 import SkillModel from "@/models/Skill";
+import { jsonLdScript, personJsonLd } from "@/lib/seo";
+import { getPublishedBlogs } from "@/app/actions/blogs";
+import BlogSection from "@/app/components/home/BlogSection";
 
 export const revalidate = 0; // Force dynamic for debugging/real-time
 
@@ -48,7 +51,7 @@ export default async function Home() {
   await connectToDatabase();
 
   // Fetch all data from MongoDB in parallel
-  const [projectsRaw, profileRaw, experiencesRaw, certificatesRaw, skillsRaw, notes, impressions, impressionTotal, companies, faqs] = await Promise.all([
+  const [projectsRaw, profileRaw, experiencesRaw, certificatesRaw, skillsRaw, notes, impressions, impressionTotal, companies, faqs, blogs] = await Promise.all([
     ProjectModel.find({}).sort({ created_at: -1 }).lean(),
     ProfileModel.findOne().lean(),
     ExperienceModel.find({}).sort({ created_at: -1 }).lean(),
@@ -58,7 +61,8 @@ export default async function Home() {
     getImpressions(6),
     countImpressions(),
     getCompanies(),
-    getFaqs()
+    getFaqs(),
+    getPublishedBlogs(),
   ]);
 
   const projects = serialize(projectsRaw);
@@ -74,6 +78,7 @@ export default async function Home() {
 
   return (
     <div>
+      <script {...jsonLdScript(personJsonLd)} />
       <HeroSection profile={profile || undefined} />
       <CounterSection counters={counters} />
       <CurrentPositionSection position={profile?.current_position} />
@@ -81,6 +86,7 @@ export default async function Home() {
       <AboutSection profile={profile || null} />
       {/* Pass data to Project component */}
       <Project initialProjects={projects || []} />
+      <BlogSection blogs={blogs || []} />
       <ExperienceSection experiences={experiences || []} />
       <ImpressionsSection initialItems={impressions} total={impressionTotal} />
       <CompaniesSection companies={companies} />

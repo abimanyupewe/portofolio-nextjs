@@ -1,12 +1,26 @@
 import React from "react";
 import Image from "next/image";
 import { Mail, Github, Linkedin, Instagram } from "lucide-react";
+import type { Metadata } from "next";
+import { jsonLdScript, personJsonLd } from "@/lib/seo";
 import connectToDatabase from "@/lib/mongodb";
 import ProfileModel from "@/models/Profile";
 
 
 // Revalidate data every 60 seconds
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+    title: "About",
+    description: "Learn about Abimanyu, a fullstack developer and QA engineer from Malang, Indonesia.",
+    alternates: { canonical: "/about" },
+    openGraph: {
+        title: "About Abimanyu",
+        description: "Learn about Abimanyu, a fullstack developer and QA engineer from Malang, Indonesia.",
+        url: "/about",
+        type: "profile",
+    },
+};
 
 // Helper to serialize Mongoose documents
 // Helper to serialize Mongoose documents
@@ -37,6 +51,7 @@ export default async function AboutPage() {
 
     return (
         <div className="min-h-screen bg-white dark:bg-black transition-colors duration-300 pt-24 pb-16">
+            <script {...jsonLdScript(personJsonLd)} />
             <div className="container mx-auto px-4 md:px-8 lg:px-16">
 
                 {/* --- HERO SECTION --- */}

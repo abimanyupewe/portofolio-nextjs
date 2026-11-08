@@ -6,6 +6,7 @@ const pages = [
   { label: "About", href: "#about" },
   { label: "Projects", href: "#project" },
   { label: "Experience", href: "#experience" },
+  { label: "Blog", href: "/blog" },
 ];
 
 const socials = [

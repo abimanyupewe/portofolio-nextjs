@@ -2,10 +2,15 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getImpressions } from "@/app/actions/impressions";
 import ImpressionsExplorer from "@/app/components/home/impressions/ImpressionsExplorer";
+import type { Metadata } from "next";
 
 export const revalidate = 60;
 
-export const metadata = { title: "Impressions | Abimanyu" };
+export const metadata: Metadata = {
+  title: "Impressions",
+  description: "What people say about working with Abimanyu.",
+  alternates: { canonical: "/impressions" },
+};
 
 export default async function ImpressionsPage() {
   const items = await getImpressions();
