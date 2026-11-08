@@ -86,7 +86,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
           />
         </div>
 
-        <div className="hero-fade font-sans text-lg md:text-xl text-muted-foreground">
+        <div className="hero-fade font-sans text-base md:text-lg text-muted-foreground">
           Passionate in{" "}
           <FlipWords
             className="font-heading italic text-foreground"
@@ -103,10 +103,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
           </Link>
           <Link
             href="#about"
-            aria-label="Contact me"
-            className="inline-flex size-12 items-center justify-center rounded-full border border-border text-foreground transition hover:bg-foreground hover:text-background active:scale-[0.98]"
+            className="group inline-flex items-center gap-2 px-4 py-3.5 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground transition hover:text-foreground"
           >
-            <ArrowRight className="size-5" />
+            About me
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
       </div>
