@@ -1,124 +1,168 @@
+import Link from "next/link";
+import {
+  ArrowUpRight,
+  Award,
+  Briefcase,
+  Building2,
+  FileText,
+  FolderKanban,
+  Heart,
+  HelpCircle,
+  MessageSquare,
+  Plus,
+} from "lucide-react";
 import connectToDatabase from "@/lib/mongodb";
 import ProjectModel from "@/models/Project";
 import BlogModel from "@/models/Blog";
 import CertificateModel from "@/models/Certificate";
-import { FolderKanban, FileText, Award, ArrowUpRight, Plus } from "lucide-react";
-import Link from "next/link";
+import ExperienceModel from "@/models/Experience";
+import ImpressionModel from "@/models/Impression";
+import NoteModel from "@/models/PlaygroundNote";
+import CompanyModel from "@/models/Company";
+import FaqModel from "@/models/Faq";
+import BannerModel from "@/models/Banner";
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 export const revalidate = 0;
+
+const fmt = (d: Date) => new Date(d).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
 
 export default async function DashboardPage() {
   await connectToDatabase();
 
-  const [projectCount, blogCount, certificateCount] = await Promise.all([
-    ProjectModel.countDocuments(),
-    BlogModel.countDocuments(),
-    CertificateModel.countDocuments(),
-  ]);
+  const [projects, blogs, certificates, experiences, impressions, notes, companies, faqs, banner, recentImpressions, recentNotes] =
+    await Promise.all([
+      ProjectModel.countDocuments(),
+      BlogModel.countDocuments(),
+      CertificateModel.countDocuments(),
+      ExperienceModel.countDocuments(),
+      ImpressionModel.countDocuments(),
+      NoteModel.countDocuments(),
+      CompanyModel.countDocuments(),
+      FaqModel.countDocuments(),
+      BannerModel.findOne({}, "enabled message").lean() as Promise<{ enabled?: boolean; message?: string } | null>,
+      // never select ip_hash / liked_by: they are visitor identifiers
+      ImpressionModel.find({}, "name company message created_at").sort({ created_at: -1 }).limit(5).lean(),
+      NoteModel.find({}, "word").sort({ created_at: -1 }).limit(16).lean(),
+    ]);
 
   const stats = [
-    {
-      label: "Total Projects",
-      value: projectCount || 0,
-      icon: <FolderKanban className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
-      bg: "bg-blue-50 dark:bg-blue-900/10",
-      border: "border-blue-100 dark:border-blue-900/20",
-      link: "/admin/dashboard/projects"
-    },
-    {
-      label: "Total Blogs",
-      value: blogCount || 0,
-      icon: <FileText className="w-6 h-6 text-purple-600 dark:text-purple-400" />,
-      bg: "bg-purple-50 dark:bg-purple-900/10",
-      border: "border-purple-100 dark:border-purple-900/20",
-      link: "/admin/dashboard/blogs"
-    },
-    {
-      label: "Certificates",
-      value: certificateCount || 0,
-      icon: <Award className="w-6 h-6 text-orange-600 dark:text-orange-400" />,
-      bg: "bg-orange-50 dark:bg-orange-900/10",
-      border: "border-orange-100 dark:border-orange-900/20",
-      link: "/admin/dashboard/experiences"
-    },
+    { label: "Projects", value: projects, icon: FolderKanban, href: "/admin/dashboard/projects" },
+    { label: "Blogs", value: blogs, icon: FileText, href: "/admin/dashboard/blogs" },
+    { label: "Certificates", value: certificates, icon: Award, href: "/admin/dashboard/experiences" },
+    { label: "Experiences", value: experiences, icon: Briefcase, href: "/admin/dashboard/experiences" },
+    { label: "Impressions", value: impressions, icon: Heart, href: "/admin/dashboard/impressions" },
+    { label: "Playground notes", value: notes, icon: MessageSquare, href: "/admin/dashboard/notes" },
+    { label: "Companies", value: companies, icon: Building2, href: "/admin/dashboard/companies" },
+    { label: "FAQ", value: faqs, icon: HelpCircle, href: "/admin/dashboard/faqs" },
   ];
 
   return (
-    <div className="space-y-8 pb-20">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+    <div className="mx-auto max-w-6xl space-y-8 pb-12">
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-            Overview
-          </h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">
-            Welcome back! Here's what's happening today.
-          </p>
+          <h1 className="font-heading text-3xl font-semibold tracking-tight">Overview</h1>
+          <p className="mt-1 text-muted-foreground">What&apos;s on your site right now.</p>
         </div>
-
-        <div className="flex gap-3">
-          <Link
-            href="/admin/dashboard/projects/create"
-            className="flex items-center gap-2 px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:opacity-90 transition-opacity font-medium text-sm"
-          >
-            <Plus size={16} /> New Project
+        <div className="flex gap-2">
+          <Link href="/admin/dashboard/projects/create" className={cn(buttonVariants({ size: "sm" }))}>
+            <Plus /> New project
           </Link>
-          <Link
-            href="/admin/dashboard/blogs/create"
-            className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-zinc-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors font-medium text-sm"
-          >
-            <Plus size={16} /> New Post
+          <Link href="/admin/dashboard/blogs/create" className={cn(buttonVariants({ variant: "outline", size: "sm" }))}>
+            <Plus /> New post
           </Link>
         </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {stats.map((stat, i) => (
-          <Link
-            key={i}
-            href={stat.link}
-            className={`p-6 rounded-2xl border ${stat.border} ${stat.bg} hover:shadow-lg transition-all duration-300 group`}
-          >
-            <div className="flex justify-between items-start mb-4">
-              <div className="p-3 bg-white dark:bg-black/20 rounded-xl shadow-sm">
-                {stat.icon}
-              </div>
-              <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-200 transition-colors" />
-            </div>
-
-            <div>
-              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                {stat.label}
-              </h3>
-              <p className="text-4xl font-bold mt-2 text-gray-900 dark:text-white">
-                {stat.value}
-              </p>
-            </div>
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {stats.map((s) => (
+          <Link key={s.label} href={s.href} className="group">
+            <Card className="h-full gap-3 py-5 transition-colors group-hover:border-foreground/40">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 px-5">
+                <CardDescription>{s.label}</CardDescription>
+                <s.icon className="size-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="flex items-end justify-between px-5">
+                <span className="font-heading text-4xl font-semibold tabular-nums">{s.value}</span>
+                <ArrowUpRight className="size-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+              </CardContent>
+            </Card>
           </Link>
         ))}
       </div>
 
-      {/* Quick Activity Section (Placeholder) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white dark:bg-zinc-900/50 border border-gray-100 dark:border-zinc-800 p-6 rounded-2xl">
-          <h3 className="font-semibold text-lg mb-4 dark:text-white">Recent Activity</h3>
-          <div className="flex flex-col items-center justify-center h-40 text-gray-400 text-sm border-2 border-dashed border-gray-100 dark:border-zinc-800 rounded-xl">
-            No recent activity to show
-          </div>
-        </div>
+      <div className="grid gap-4 lg:grid-cols-5">
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <CardTitle>Recent impressions</CardTitle>
+            <CardDescription>Latest words about working with you.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {recentImpressions.length ? (
+              <ul className="divide-y divide-border">
+                {recentImpressions.map((i: any) => (
+                  <li key={String(i._id)} className="space-y-1 py-3 first:pt-0 last:pb-0">
+                    <div className="flex items-baseline justify-between gap-3">
+                      <p className="truncate text-sm font-medium">
+                        {i.name}
+                        {i.company && <span className="font-normal text-muted-foreground"> · {i.company}</span>}
+                      </p>
+                      <span className="shrink-0 text-xs text-muted-foreground">{fmt(i.created_at)}</span>
+                    </div>
+                    <p className="line-clamp-2 text-sm text-muted-foreground">{i.message}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="py-8 text-center text-sm text-muted-foreground">No impressions yet.</p>
+            )}
+            {impressions > 0 && (
+              <Link href="/admin/dashboard/impressions" className="mt-4 inline-block text-sm underline-offset-4 hover:underline">
+                Manage all {impressions}
+              </Link>
+            )}
+          </CardContent>
+        </Card>
 
-        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-6 rounded-2xl text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
-          <div className="relative z-10">
-            <h3 className="font-bold text-xl mb-2">Portfolio Analytics</h3>
-            <p className="text-white/80 mb-6 max-w-sm">
-              Check your website performance, visitor count, and most viewed projects.
-            </p>
-            <button className="px-5 py-2.5 bg-white text-indigo-600 rounded-lg font-semibold text-sm hover:shadow-lg hover:scale-105 transition-all">
-              View Analytics
-            </button>
-          </div>
+        <div className="space-y-4 lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Sticky banner</CardTitle>
+              <CardDescription>
+                <Badge variant={banner?.enabled ? "default" : "outline"}>{banner?.enabled ? "Live" : "Off"}</Badge>
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="line-clamp-2 text-sm text-muted-foreground">
+                {banner?.message || "No banner set up yet."}
+              </p>
+              <Link href="/admin/dashboard/banner" className="text-sm underline-offset-4 hover:underline">
+                Edit banner
+              </Link>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Latest playground words</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {recentNotes.length ? (
+                <div className="flex flex-wrap gap-2">
+                  {recentNotes.map((n: any) => (
+                    <Badge key={String(n._id)} variant="outline">
+                      {n.word}
+                    </Badge>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">No words yet.</p>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

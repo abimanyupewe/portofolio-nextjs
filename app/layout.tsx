@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, DM_Sans, Pixelify_Sans } from "next/font/google";
 import "./globals.css";
-import Preloader from "@/app/components/ui/Preloader";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -24,8 +23,8 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Portofolio Abimanyu",
-  description: "Created by Abim",
+  title: "Abimanyu — Fullstack Developer & QA Engineer",
+  description: "Portfolio of Abimanyu, a fullstack developer and QA engineer.",
 };
 
 export default function RootLayout({
@@ -36,7 +35,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body className={`${fraunces.variable} ${dmSans.variable} ${pixelify.variable} font-sans antialiased`}>
-        <Preloader />
         {children}
       </body>
     </html>

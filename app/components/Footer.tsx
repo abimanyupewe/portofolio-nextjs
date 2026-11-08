@@ -15,6 +15,8 @@ const socials = [
   { label: "Email", href: "mailto:abimanyupw369@gmail.com" },
 ];
 
+const TAGLINE = "Code. Test. Ship.";
+
 const Footer = () => {
   return (
     <footer className="relative w-full overflow-hidden border-t border-border bg-background">
@@ -50,12 +52,21 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Big pixel tagline, faded at the bottom edge like the reference */}
+        {/* Big pixel tagline, faded at the bottom edge. Each letter lights up on hover and fades back slowly. */}
         <div
-          aria-hidden
-          className="mt-16 select-none whitespace-nowrap text-center font-[family-name:var(--font-pixelify-sans)] text-[11.5vw] leading-[0.85] tracking-tight text-foreground/10 [mask-image:linear-gradient(to_bottom,black_40%,transparent)] md:text-[10.5vw] xl:text-[9.5rem]"
+          aria-label={TAGLINE}
+          role="img"
+          className="mt-16 cursor-default select-none whitespace-nowrap text-center font-[family-name:var(--font-pixelify-sans)] text-[11.5vw] leading-[0.85] tracking-tight [mask-image:linear-gradient(to_bottom,black_40%,transparent)] md:text-[10.5vw] xl:text-[9.5rem]"
         >
-          Code. Test. Ship.
+          {Array.from(TAGLINE).map((ch, i) => (
+            <span
+              key={i}
+              aria-hidden
+              className="inline-block whitespace-pre text-foreground/10 transition-[color,transform] duration-1000 ease-out hover:-translate-y-3 hover:text-foreground hover:duration-150"
+            >
+              {ch}
+            </span>
+          ))}
         </div>
       </div>
     </footer>

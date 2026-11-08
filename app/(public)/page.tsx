@@ -8,6 +8,13 @@ import ExperienceSection from "@/app/components/home/ExperienceSection";
 import AboutSection from "@/app/components/home/AboutSection";
 import PlaygroundNote from "@/app/components/home/PlaygroundNote";
 import { getNotes } from "@/app/actions/notes";
+import ImpressionsSection from "@/app/components/home/impressions/ImpressionsSection";
+import CompaniesSection from "@/app/components/home/CompaniesSection";
+import MatrixTrailSection from "@/app/components/home/MatrixTrailSection";
+import { getImpressions, countImpressions } from "@/app/actions/impressions";
+import { getCompanies } from "@/app/actions/companies";
+import FaqSection from "@/app/components/home/FaqSection";
+import { getFaqs } from "@/app/actions/faqs";
 import connectToDatabase from "@/lib/mongodb";
 import ProjectModel from "@/models/Project";
 import ProfileModel from "@/models/Profile";
@@ -41,13 +48,17 @@ export default async function Home() {
   await connectToDatabase();
 
   // Fetch all data from MongoDB in parallel
-  const [projectsRaw, profileRaw, experiencesRaw, certificatesRaw, skillsRaw, notes] = await Promise.all([
+  const [projectsRaw, profileRaw, experiencesRaw, certificatesRaw, skillsRaw, notes, impressions, impressionTotal, companies, faqs] = await Promise.all([
     ProjectModel.find({}).sort({ created_at: -1 }).lean(),
     ProfileModel.findOne().lean(),
     ExperienceModel.find({}).sort({ created_at: -1 }).lean(),
     CertificateModel.find({}).sort({ date: -1 }).lean(),
     SkillModel.find({ icon_url: { $ne: null } }).lean(),
-    getNotes()
+    getNotes(),
+    getImpressions(6),
+    countImpressions(),
+    getCompanies(),
+    getFaqs()
   ]);
 
   const projects = serialize(projectsRaw);
@@ -71,7 +82,11 @@ export default async function Home() {
       {/* Pass data to Project component */}
       <Project initialProjects={projects || []} />
       <ExperienceSection experiences={experiences || []} />
+      <ImpressionsSection initialItems={impressions} total={impressionTotal} />
+      <CompaniesSection companies={companies} />
+      <FaqSection faqs={faqs} />
       <PlaygroundNote initialNotes={notes} />
+      <MatrixTrailSection />
       {/* <SertificateSection certificates={certificates || []} /> */}
     </div>
   );

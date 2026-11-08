@@ -1,5 +1,6 @@
 "use client";
 
+import AdminSkeleton from "@/app/components/admin/AdminSkeleton";
 import React, { useState, useEffect } from "react";
 import ImageUpload from "@/app/components/admin/ImageUpload";
 import TagInput from "@/app/components/admin/TagInput";
@@ -197,7 +198,7 @@ export default function ProfileSkillsPage() {
         }
     };
 
-    if (loading) return <div className="p-8">Loading...</div>;
+    if (loading) return <AdminSkeleton />;
 
     return (
         <div className="space-y-12 pb-20">

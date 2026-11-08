@@ -1,5 +1,6 @@
 "use client";
 
+import AdminSkeleton from "@/app/components/admin/AdminSkeleton";
 import { useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
 import { getAllNotes, deleteNote } from "@/app/actions/notes";
@@ -20,7 +21,7 @@ export default function NotesPage() {
         setNotes((prev) => prev.filter((n) => n.id !== id));
     };
 
-    if (loading) return <div className="p-8">Loading...</div>;
+    if (loading) return <AdminSkeleton />;
 
     return (
         <div className="space-y-6 pb-20">

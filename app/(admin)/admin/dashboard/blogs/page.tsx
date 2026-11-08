@@ -1,5 +1,6 @@
 "use client";
 
+import AdminSkeleton from "@/app/components/admin/AdminSkeleton";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash2 } from "lucide-react";
@@ -44,7 +45,7 @@ export default function BlogsPage() {
     }
   };
 
-  if (loading) return <div className="p-8">Loading...</div>;
+  if (loading) return <AdminSkeleton />;
 
   return (
     <div className="space-y-6">

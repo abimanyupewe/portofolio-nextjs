@@ -20,22 +20,20 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ experiences = [] 
   const data = experiences.map((exp) => ({
     title: exp.duration, // Using duration as the timeline "year/period"
     content: (
-      <div>
-        <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">{exp.company}</h3>
-        <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4">{exp.position}</p>
-        <p className="mb-8 text-xs font-normal text-neutral-800 md:text-base dark:text-neutral-200">
-          {exp.description}
-        </p>
+      <div className="space-y-4">
+        <div>
+          <h3 className="font-heading text-2xl font-medium leading-tight md:text-3xl">{exp.company}</h3>
+          <p className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">{exp.position}</p>
+        </div>
+        <p className="max-w-2xl text-base leading-relaxed text-foreground/80">{exp.description}</p>
         {exp.logo_url && (
-          <div className="grid grid-cols-2 gap-4">
-            <Image
-              src={exp.logo_url}
-              alt={exp.company}
-              width={500}
-              height={500}
-              className="h-20 w-fit rounded-lg object-contain shadow-md"
-            />
-          </div>
+          <Image
+            src={exp.logo_url}
+            alt={exp.company}
+            width={200}
+            height={200}
+            className="h-14 w-fit rounded-lg object-contain"
+          />
         )}
       </div>
     ),
@@ -47,8 +45,8 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ experiences = [] 
       title: "2024",
       content: (
         <div>
-          <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">Welcome!</h3>
-          <p className="mb-8 text-neutral-800 dark:text-neutral-200">
+          <h3 className="mb-2 font-heading text-2xl font-medium">Welcome!</h3>
+          <p className="text-base text-foreground/80">
             This is where my journey begins. I'm ready to learn and grow.
           </p>
         </div>
@@ -57,10 +55,10 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ experiences = [] 
   ];
 
   return (
-    <div className="relative w-full overflow-clip bg-white dark:bg-black transition-colors duration-300">
+    <div id="experience" className="relative w-full overflow-clip bg-background">
       <Timeline
         data={data.length > 0 ? data : defaultData}
-        title="MY EXPERIENCE"
+        title="Where I've worked & learned"
         description="A timeline of my professional journey, highlighting key milestones and career growth."
       />
     </div>

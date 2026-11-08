@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { AnimatePresence, motion } from "motion/react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
@@ -12,30 +13,30 @@ export function ModeToggle() {
     setMounted(true)
   }, [])
 
-  if (!mounted) {
-    return null
-  }
+  // Same footprint before mount so the navbar doesn't shift.
+  if (!mounted) return <span aria-hidden className="inline-block size-10" />
 
   const isDark = resolvedTheme === "dark"
 
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="relative inline-flex h-9 w-16 items-center rounded-md bg-gray-200 p-1 transition-colors dark:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-      aria-label="Toggle theme"
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      title={isDark ? "Light mode" : "Dark mode"}
+      className="relative inline-flex size-10 items-center justify-center overflow-hidden rounded-full border border-border text-foreground transition-colors hover:bg-muted active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
-        <span className="sr-only">Toggle theme</span>
-        <span
-            className={`${
-            isDark ? "translate-x-7 bg-zinc-950" : "translate-x-0 bg-white"
-            } pointer-events-none flex h-7 w-7 items-center justify-center rounded-md shadow-xs ring-0 transition-transform duration-200`}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.span
+          key={isDark ? "moon" : "sun"}
+          initial={{ rotate: -90, scale: 0.4, opacity: 0 }}
+          animate={{ rotate: 0, scale: 1, opacity: 1 }}
+          exit={{ rotate: 90, scale: 0.4, opacity: 0 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          className="flex"
         >
-            {isDark ? (
-                <Moon className="h-4 w-4 text-white" />
-            ) : (
-                <Sun className="h-4 w-4 text-black" />
-            )}
-        </span>
+          {isDark ? <Moon className="size-[18px]" /> : <Sun className="size-[18px]" />}
+        </motion.span>
+      </AnimatePresence>
     </button>
   )
 }

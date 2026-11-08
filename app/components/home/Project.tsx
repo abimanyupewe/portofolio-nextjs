@@ -6,7 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TabBar from "./project/TabBar";
 import ProjectCard from "./project/ProjectCard";
-import ProjectPopup, { ProjectType } from "./project/ProjectPopup";
+import type { ProjectType } from "./project/ProjectPopup";
 import FilterCheckbox from "./project/FilterCheckbox";
 import Title from "./props/Title";
 import LanguageFilter from "./project/LanguageFilter";
@@ -52,7 +52,6 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
 
   const [activeTab, setActiveTab] = useState<string>("All Project");
 
-  const [selectedProject, setSelectedProject] = useState<ProjectType | null>(null);
   const [filters, setFilters] = useState<string[]>([]);
   const [filtersLanguage, setFiltersLanguage] = useState<string[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
@@ -202,10 +201,7 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6 project-grid">
                   {currentProjects.map((project) => (
                     <div key={project.id} className="project-card">
-                      <ProjectCard
-                        project={project}
-                        onClick={() => setSelectedProject(project)}
-                      />
+                      <ProjectCard project={project} />
                     </div>
                   ))}
                 </div>
@@ -283,12 +279,6 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
         </div>
       </div>
 
-      {selectedProject && (
-        <ProjectPopup
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
-      )}
     </section>
   );
 };

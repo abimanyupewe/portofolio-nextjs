@@ -1,23 +1,23 @@
 import React from "react";
 import Badge from "./ColorMapping";
 import Image from "next/image";
+import Link from "next/link";
 import { ProjectType } from "./ProjectPopup"; // Import shared type if possible, or redefine
 
 interface ProjectCardProps {
   project: ProjectType;
-  onClick: () => void;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   // Determine display image
   const displayImage = project.thumbnail_url
     ? project.thumbnail_url
     : (Array.isArray(project.image) ? project.image[0] : project.image);
 
   return (
-    <div
-      onClick={onClick}
-      className="cursor-pointer bg-white dark:bg-zinc-900 rounded-lg shadow-xs border border-gray-100 dark:border-zinc-800 overflow-hidden hover:shadow-md hover:border-black/30 dark:hover:border-white/30 transition-all duration-300 group"
+    <Link
+      href={`/projects/${project.id}`}
+      className="block bg-white dark:bg-zinc-900 rounded-lg shadow-xs border border-gray-100 dark:border-zinc-800 overflow-hidden hover:shadow-md hover:border-black/30 dark:hover:border-white/30 transition-all duration-300 group"
     >
       <div className="relative h-48 overflow-hidden">
         {displayImage ? (
@@ -46,7 +46,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
             {project.category?.slice(0, 2).map((cat, i) => (
               <Badge key={i} type="categoryProject" value={cat} />
             ))}
-            {project.category.length > 2 && <span className="text-xs text-gray-400">+{project.category.length - 2}</span>}
+            {project.category?.length > 2 && <span className="text-xs text-gray-400">+{project.category.length - 2}</span>}
           </div>
         </div>
 
@@ -71,7 +71,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
           </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

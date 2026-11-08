@@ -34,7 +34,8 @@ const Navbar = (props: Props) => {
 
   return (
     <header
-      className={`flex z-30 md:z-50 fixed top-0 items-center justify-between py-5 font-medium w-full left-0 lg:px-24 px-8 transition-all duration-300 ${scrolled ? "bg-white dark:bg-zinc-900/80 dark:backdrop-blur-md shadow-md py-8" : "bg-transparent"
+      style={{ top: "var(--banner-h, 0px)" }}
+      className={`flex z-30 md:z-50 fixed items-center justify-between py-5 font-medium w-full left-0 lg:px-24 px-8 transition-all duration-300 ${scrolled ? "bg-white dark:bg-zinc-900/80 dark:backdrop-blur-md shadow-md py-8" : "bg-transparent"
         }`}
     >
       <Link href="/">

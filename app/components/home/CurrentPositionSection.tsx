@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Briefcase, MapPin, Calendar, Building2, CheckCircle2 } from "lucide-react";
+import { motion } from "motion/react";
 
 export interface CurrentPositionData {
   role?: string;
@@ -36,70 +36,74 @@ const CurrentPositionSection: React.FC<CurrentPositionSectionProps> = ({
 
   if (current.is_active === false) return null;
 
+  const details = [
+    { label: "Type", value: current.status_type },
+    { label: "Location", value: current.location },
+    { label: "Period", value: current.period },
+  ].filter((d) => d.value);
+
   return (
-    <section className="w-full bg-white dark:bg-black py-16 md:py-24 border-y border-zinc-200 dark:border-zinc-900 transition-colors duration-300">
-      <div className="max-w-5xl mx-auto px-6 md:px-8">
-        {/* Header Label */}
-        <div className="flex items-center gap-3 mb-6">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-black dark:bg-white"></span>
+    <section
+      id="current"
+      className="w-full border-y border-border bg-background py-20 md:py-28"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="mx-auto grid max-w-6xl gap-10 px-6 md:grid-cols-[1fr_3fr] md:gap-16 md:px-8"
+      >
+        {/* Label */}
+        <div className="flex items-center gap-3 self-start md:pt-3">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-foreground opacity-50" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-foreground" />
           </span>
-          <span className="text-xs font-semibold tracking-[0.2em] text-zinc-500 dark:text-zinc-400 uppercase font-sans">
-            CURRENT STATUS
+          <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+            Current status
           </span>
         </div>
 
-        {/* Main Section Content Card */}
-        <div className="relative group rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-950/60 p-8 md:p-12 transition-all duration-300 hover:border-black dark:hover:border-white">
-          <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8">
-            {/* Left Content */}
-            <div className="space-y-6 flex-1">
-              {/* Status Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-800">
-                <CheckCircle2 className="w-3.5 h-3.5 text-zinc-700 dark:text-zinc-300" />
-                <span>{current.status_type || "Internship"}</span>
-              </div>
-
-              {/* Position & Company */}
-              <div>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold uppercase text-black dark:text-white tracking-tight leading-tight">
-                  {current.role}
-                </h2>
-                <div className="flex items-center gap-2 text-lg sm:text-xl text-zinc-700 dark:text-zinc-300 font-sans mt-2 font-medium">
-                  <Building2 className="w-5 h-5 text-zinc-400 dark:text-zinc-500 shrink-0" />
-                  <span>{current.company}</span>
-                </div>
-              </div>
-
-              {/* Description */}
-              {current.description && (
-                <p className="text-base md:text-lg text-zinc-600 dark:text-zinc-400 font-sans leading-relaxed max-w-3xl">
-                  {current.description}
-                </p>
+        {/* Content */}
+        <div className="space-y-8">
+          <div className="space-y-4">
+            <h2 className="font-heading text-4xl font-light leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
+              {current.role}
+            </h2>
+            <div className="flex items-center gap-3 text-lg text-muted-foreground">
+              {current.logo_url && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={current.logo_url}
+                  alt=""
+                  width={32}
+                  height={32}
+                  className="h-8 w-8 rounded-full object-cover"
+                />
               )}
-
-              {/* Metadata Items */}
-              <div className="flex flex-wrap items-center gap-4 text-xs md:text-sm text-zinc-500 dark:text-zinc-400 pt-2 border-t border-zinc-200 dark:border-zinc-800/80">
-                <div className="flex items-center gap-1.5 font-sans">
-                  <MapPin className="w-4 h-4 text-zinc-400 dark:text-zinc-500" />
-                  <span>{current.location}</span>
-                </div>
-                <span className="text-zinc-300 dark:text-zinc-800">•</span>
-                <div className="flex items-center gap-1.5 font-sans">
-                  <Calendar className="w-4 h-4 text-zinc-400 dark:text-zinc-500" />
-                  <span>{current.period}</span>
-                </div>
-                <span className="text-zinc-300 dark:text-zinc-800">•</span>
-                <div className="flex items-center gap-1.5 font-sans">
-                  <Briefcase className="w-4 h-4 text-zinc-400 dark:text-zinc-500" />
-                  <span>Quality Assurance</span>
-                </div>
-              </div>
+              <span className="italic">{current.company}</span>
             </div>
           </div>
+
+          {current.description && (
+            <p className="max-w-2xl text-base leading-relaxed text-foreground/80 md:text-lg">
+              {current.description}
+            </p>
+          )}
+
+          <dl className="grid grid-cols-1 divide-y divide-border border-y border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+            {details.map((d) => (
+              <div key={d.label} className="space-y-1 py-4 sm:px-6 sm:first:pl-0 sm:last:pr-0">
+                <dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                  {d.label}
+                </dt>
+                <dd className="text-base">{d.value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

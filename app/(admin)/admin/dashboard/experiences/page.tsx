@@ -1,5 +1,6 @@
 "use client";
 
+import AdminSkeleton from "@/app/components/admin/AdminSkeleton";
 import React, { useState, useEffect } from "react";
 import { Plus, Trash2, Loader2, Calendar, Pencil, X } from "lucide-react";
 import ImageUpload from "@/app/components/admin/ImageUpload";
@@ -155,7 +156,7 @@ export default function ExperiencesPage() {
         }
     };
 
-    if (loading) return <div className="p-8">Loading...</div>;
+    if (loading) return <AdminSkeleton />;
 
     return (
         <div className="space-y-12 pb-20">

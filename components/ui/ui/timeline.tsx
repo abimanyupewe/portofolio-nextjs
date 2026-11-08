@@ -18,11 +18,12 @@ export const Timeline = ({ data, title, description }: { data: TimelineEntry[], 
   const [height, setHeight] = useState(0);
 
   useEffect(() => {
-    if (ref.current) {
-      const rect = ref.current.getBoundingClientRect();
-      setHeight(rect.height);
-    }
-  }, [ref]);
+    if (!ref.current) return;
+    // The track grows with its content (fonts, images), so follow its size instead of measuring once.
+    const ro = new ResizeObserver(() => setHeight(ref.current?.getBoundingClientRect().height ?? 0));
+    ro.observe(ref.current);
+    return () => ro.disconnect();
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -33,54 +34,44 @@ export const Timeline = ({ data, title, description }: { data: TimelineEntry[], 
   const opacityTransform = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
 
   return (
-    <div
-      className="w-full bg-white dark:bg-neutral-950 font-sans md:px-10"
-      ref={containerRef}
-    >
-      <div className="max-w-7xl mx-auto py-20 px-4 md:px-8 lg:px-10">
-        <h2 className="text-lg md:text-4xl mb-4 text-black dark:text-white max-w-4xl font-heading font-bold">
+    <div className="w-full bg-background font-sans md:px-10" ref={containerRef}>
+      <div className="mx-auto max-w-7xl space-y-4 px-4 py-20 md:px-8 lg:px-10">
+        <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Experience</p>
+        <h2 className="max-w-4xl font-heading text-4xl font-light leading-[1.05] tracking-tight md:text-6xl">
           {title || "Changelog from my journey"}
         </h2>
-        <p className="text-neutral-700 dark:text-neutral-300 text-sm md:text-base max-w-sm">
+        <p className="max-w-md text-sm text-muted-foreground md:text-base">
           {description || "I've been working on these for the past 2 years. Here's a timeline of my journey."}
         </p>
       </div>
 
-      <div ref={ref} className="relative max-w-7xl mx-auto pb-20">
+      <div ref={ref} className="relative mx-auto max-w-7xl pb-20">
         {data.map((item, index) => (
-          <div
-            key={index}
-            className="flex justify-start pt-10 md:pt-40 md:gap-10"
-          >
-            <div className="sticky flex flex-col md:flex-row z-40 items-center top-40 self-start max-w-xs lg:max-w-sm md:w-full">
-              <div className="h-10 absolute left-3 md:left-3 w-10 rounded-md bg-white dark:bg-black flex items-center justify-center border border-neutral-200 dark:border-neutral-800">
-                <div className="h-3 w-3 rounded-xs bg-black dark:bg-white" />
+          <div key={index} className="flex justify-start pt-10 md:gap-10 md:pt-24">
+            <div className="sticky top-32 z-40 flex max-w-xs items-center self-start md:w-full lg:max-w-sm">
+              <div className="absolute left-4 flex h-8 w-8 items-center justify-center rounded-full border border-border bg-background">
+                <div className="h-2.5 w-2.5 rounded-full bg-foreground" />
               </div>
-              <h3 className="hidden md:block text-xl md:pl-20 md:text-2xl font-heading font-bold text-neutral-800 dark:text-neutral-200">
+              <h3 className="hidden font-heading text-xl text-muted-foreground md:block md:pl-20 md:text-2xl">
                 {item.title}
               </h3>
             </div>
 
-            <div className="relative pl-20 pr-4 md:pl-4 w-full">
-              <h3 className="md:hidden block text-2xl mb-4 text-left font-heading font-bold text-neutral-800 dark:text-neutral-200">
+            <div className="relative w-full pl-20 pr-4 md:pl-4">
+              <h3 className="mb-4 block text-left font-heading text-2xl text-muted-foreground md:hidden">
                 {item.title}
               </h3>
-              {item.content}{" "}
+              {item.content}
             </div>
           </div>
         ))}
         <div
-          style={{
-            height: height + "px",
-          }}
-          className="absolute md:left-8 left-8 top-0 overflow-hidden w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-neutral-200 dark:via-neutral-700 to-transparent to-[99%]  [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] "
+          style={{ height: height + "px" }}
+          className="absolute left-8 top-0 w-[2px] overflow-hidden bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-border to-transparent to-[99%] [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)]"
         >
           <motion.div
-            style={{
-              height: heightTransform,
-              opacity: opacityTransform,
-            }}
-            className="absolute inset-x-0 top-0  w-[2px] bg-gradient-to-t from-black dark:from-white via-gray-500 to-transparent from-[0%] via-[10%]"
+            style={{ height: heightTransform, opacity: opacityTransform }}
+            className="absolute inset-x-0 top-0 w-[2px] bg-gradient-to-t from-foreground via-muted-foreground to-transparent from-[0%] via-[10%]"
           />
         </div>
       </div>
