@@ -28,6 +28,11 @@ export const metadata: Metadata = {
   metadataBase: siteUrl,
   title: "Abimanyu — Fullstack Developer & QA Engineer",
   description: "Portfolio of Abimanyu, a fullstack developer and QA engineer.",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
