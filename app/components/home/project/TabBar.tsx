@@ -1,27 +1,46 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef, useState } from "react";
+import OptionWheel from "@/components/OptionWheel";
 
 interface TabBarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
 }
 
+const tabs = ["All Project", "Website", "App", "UI/UX Design", "Fullstack"];
+
+// Category picker as a plain-text wheel (no boxes/outlines).
 const TabBar: React.FC<TabBarProps> = ({ activeTab, setActiveTab }) => {
-  const tabs = ["All Project", "Website", "App", "UI/UX Design", "Fullstack"];
+  const chosen = useRef(activeTab);
+  const [wheelKey, setWheelKey] = useState(0);
+
+  // The wheel is uncontrolled: remount it only when the category is changed from outside (e.g. "Clear Filters").
+  useEffect(() => {
+    if (activeTab !== chosen.current) {
+      chosen.current = activeTab;
+      setWheelKey((k) => k + 1);
+    }
+  }, [activeTab]);
 
   return (
-    <div className="flex flex-col space-y-2 bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-lg p-2">
-      {tabs.map((tab, index) => (
-        <button
-          key={index}
-          onClick={() => setActiveTab(tab)}
-          className={`p-3 rounded-md text-left transition-all duration-200 ${activeTab === tab
-              ? "bg-black text-white dark:bg-white dark:text-black font-semibold shadow-xs"
-              : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-black dark:hover:text-white"
-            }`}
-        >
-          {tab}
-        </button>
-      ))}
+    <div className="h-56 w-full">
+      <OptionWheel
+        key={wheelKey}
+        items={tabs}
+        defaultSelected={Math.max(tabs.indexOf(activeTab), 0)}
+        onChange={(_, item) => {
+          chosen.current = item;
+          setActiveTab(item);
+        }}
+        textColor="var(--muted-foreground)"
+        activeColor="var(--foreground)"
+        fontSize={1.5}
+        inset={0}
+        blur={1}
+        fade={0.12}
+        minOpacity={0.2}
+      />
     </div>
   );
 };

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { motion, MotionConfig } from "motion/react";
 import { Mail, Copy, Check, Phone } from "lucide-react";
 
 // WhatsApp Icon Component
@@ -22,6 +23,7 @@ interface Profile {
     full_name: string | null;
     bio: string | null;
     avatar_url: string | null;
+    avatar_manga_url?: string | null;
     taglines: string[] | null;
 }
 
@@ -69,20 +71,44 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                 <div className="flex flex-col md:flex-row items-center gap-12">
                     {/* Image Side */}
                     <div className="w-full md:w-1/3 flex justify-center">
-                        <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-lg overflow-hidden border-4 border-gray-100 dark:border-zinc-800 shadow-xl">
-                            {profile?.avatar_url ? (
-                                <Image
-                                    src={profile.avatar_url}
-                                    alt={profile.full_name || "Profile"}
-                                    fill
-                                    className="object-cover"
-                                />
-                            ) : (
-                                <div className="w-full h-full bg-gray-200 dark:bg-zinc-800 flex items-center justify-center">
-                                    <span className="text-gray-400">No Avatar</span>
-                                </div>
-                            )}
-                        </div>
+                        {/* Manga by default; real photo reveals on hover/focus. Only opacity+transform animate (GPU, no layout cost). */}
+                        <MotionConfig reducedMotion="user" transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
+                            <motion.div
+                                tabIndex={0}
+                                initial="rest"
+                                animate="rest"
+                                whileHover="hover"
+                                whileFocus="hover"
+                                className="relative w-64 md:w-80 aspect-[3/4] rounded-lg overflow-hidden border-4 border-gray-100 dark:border-zinc-800 shadow-xl outline-none"
+                            >
+                                <motion.div
+                                    className="absolute inset-0 will-change-transform"
+                                    variants={{ rest: { opacity: 1, scale: 1 }, hover: { opacity: 0, scale: 1.06 } }}
+                                >
+                                    <Image
+                                        src={profile?.avatar_manga_url || "/avatar-manga.png"}
+                                        alt={profile?.full_name || "Profile"}
+                                        fill
+                                        sizes="(min-width: 768px) 320px, 256px"
+                                        className="object-cover object-top"
+                                    />
+                                </motion.div>
+                                {profile?.avatar_url && (
+                                    <motion.div
+                                        className="absolute inset-0 will-change-transform"
+                                        variants={{ rest: { opacity: 0, scale: 1.1 }, hover: { opacity: 1, scale: 1 } }}
+                                    >
+                                        <Image
+                                            src={profile.avatar_url}
+                                            alt={`${profile.full_name || "Profile"} (photo)`}
+                                            fill
+                                            sizes="(min-width: 768px) 320px, 256px"
+                                            className="object-cover object-top"
+                                        />
+                                    </motion.div>
+                                )}
+                            </motion.div>
+                        </MotionConfig>
                     </div>
 
                     {/* Text Side */}

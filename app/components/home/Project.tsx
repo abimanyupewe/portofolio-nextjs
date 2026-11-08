@@ -97,6 +97,11 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
     });
   }, [activeTab, filters, filtersLanguage, initialProjects]);
 
+  // Plain-text summary of what is currently filtered
+  const activeFilterText = [activeTab !== "All Project" ? activeTab : null, ...filters, ...filtersLanguage]
+    .filter(Boolean)
+    .join(" · ");
+
   // Pagination calculations
   const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -135,7 +140,7 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
         {/* Mobile Filter Toggle */}
         <div className="md:hidden flex justify-between items-center mb-6">
           <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-            {filteredProjects.length} Projects found
+            {filteredProjects.length} Projects found{activeFilterText && ` — ${activeFilterText}`}
           </span>
           <button
             onClick={() => setIsSidebarOpen(true)}
@@ -188,6 +193,7 @@ const Project: React.FC<ProjectProps> = ({ initialProjects = [] }) => {
             <div className="hidden md:flex justify-between items-center mb-6">
               <p className="text-gray-500 dark:text-gray-400 text-sm">
                 Showing <span className="font-bold text-black dark:text-white">{filteredProjects.length}</span> projects
+                {activeFilterText && <span> — {activeFilterText}</span>}
               </p>
             </div>
 

@@ -23,6 +23,7 @@ interface Profile {
     full_name: string;
     bio: string;
     avatar_url: string;
+    avatar_manga_url?: string;
     taglines: string[];
     social_links: any;
     current_position?: CurrentPosition;
@@ -46,6 +47,7 @@ export default function ProfileSkillsPage() {
     const [fullName, setFullName] = useState("");
     const [bio, setBio] = useState("");
     const [avatarUrl, setAvatarUrl] = useState("");
+    const [avatarMangaUrl, setAvatarMangaUrl] = useState("");
     const [taglines, setTaglines] = useState<string[]>([]);
 
     // Current Position Form States
@@ -78,6 +80,7 @@ export default function ProfileSkillsPage() {
                 setFullName(profileData.full_name || "");
                 setBio(profileData.bio || "");
                 setAvatarUrl(profileData.avatar_url || "");
+                setAvatarMangaUrl(profileData.avatar_manga_url || "");
                 setTaglines(profileData.taglines || []);
 
                 if (profileData.current_position) {
@@ -107,6 +110,7 @@ export default function ProfileSkillsPage() {
                 full_name: fullName,
                 bio,
                 avatar_url: avatarUrl,
+                avatar_manga_url: avatarMangaUrl,
                 taglines,
             };
             // Update logic handled by action (singleton)
@@ -208,7 +212,13 @@ export default function ProfileSkillsPage() {
                 <div className="flex flex-col md:flex-row gap-8">
                     <div className="w-full md:w-1/3 flex flex-col items-center gap-4">
                         <ImageUpload
-                            label="Profile Photo"
+                            label="Manga Portrait (default on About)"
+                            value={avatarMangaUrl}
+                            onChange={(url) => setAvatarMangaUrl(url as string)}
+                            folder="profile"
+                        />
+                        <ImageUpload
+                            label="Real Photo (shown on hover)"
                             value={avatarUrl}
                             onChange={(url) => setAvatarUrl(url as string)}
                             folder="profile"

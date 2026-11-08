@@ -1,26 +1,25 @@
 import type { Metadata } from "next";
-import { Syne, Space_Grotesk, Indie_Flower } from "next/font/google";
+import { Fraunces, DM_Sans, Pixelify_Sans } from "next/font/google";
 import "./globals.css";
 import Preloader from "@/app/components/ui/Preloader";
 
-const syne = Syne({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-syne",
+  style: ["normal", "italic"],
+  variable: "--font-fraunces",
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const pixelify = Pixelify_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-space-grotesk",
+  weight: ["700"],
+  variable: "--font-pixelify-sans",
   display: "swap",
 });
 
-const indieFlower = Indie_Flower({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-indie-flower",
+  variable: "--font-dm-sans",
   display: "swap",
 });
 
@@ -36,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${syne.variable} ${spaceGrotesk.variable} ${indieFlower.variable} font-sans antialiased`}>
+      <body className={`${fraunces.variable} ${dmSans.variable} ${pixelify.variable} font-sans antialiased`}>
         <Preloader />
         {children}
       </body>

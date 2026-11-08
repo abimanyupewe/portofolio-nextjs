@@ -13,6 +13,7 @@ import {
     ChevronLeft,
     ChevronRight,
     Menu,
+    MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -47,6 +48,11 @@ const Sidebar = () => {
             href: "/admin/dashboard/blogs",
             icon: <FileText size={20} />,
             label: "Blogs"
+        },
+        {
+            href: "/admin/dashboard/notes",
+            icon: <MessageSquare size={20} />,
+            label: "Playground Notes"
         }
     ];
 

@@ -16,6 +16,7 @@ export interface IProfile extends Document {
     taglines: string[];
     bio: string;
     avatar_url: string;
+    avatar_manga_url?: string;
     social_links: Record<string, string>;
     current_position?: ICurrentPosition;
     created_at: Date;
@@ -37,6 +38,7 @@ const ProfileSchema: Schema = new Schema({
     taglines: { type: [String], default: [] },
     bio: { type: String },
     avatar_url: { type: String },
+    avatar_manga_url: { type: String },
     social_links: { type: Map, of: String, default: {} },
     current_position: { type: CurrentPositionSchema, default: () => ({}) },
     created_at: { type: Date, default: Date.now }

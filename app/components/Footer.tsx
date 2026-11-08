@@ -1,108 +1,92 @@
 import Link from "next/link";
 import React from "react";
-import { Github, Instagram, Linkedin, Mail } from "lucide-react";
 
-type Props = {};
+const pages = [
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Projects", href: "#project" },
+  { label: "Experience", href: "#experience" },
+];
 
-const Footer = (props: Props) => {
+const socials = [
+  { label: "GitHub", href: "https://github.com/abimanyupewe" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/abimanyu-priyo-widagdo-101a46279/" },
+  { label: "Instagram", href: "https://www.instagram.com/hoohbim_" },
+  { label: "Email", href: "mailto:abimanyupw369@gmail.com" },
+];
+
+const Footer = () => {
   return (
-    <footer className="w-full bg-white dark:bg-black border-t border-gray-100 dark:border-neutral-900 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-8">
-
-          {/* Brand Column */}
+    <footer className="relative w-full overflow-hidden border-t border-border bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-20">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
+          {/* Brand */}
           <div className="space-y-4">
-            <Link href="#home" className="inline-block">
-              <h1 className="text-2xl font-heading font-bold text-black dark:text-white">
-                Abimanyu<span className="text-gray-400">.</span>
-              </h1>
+            <Link href="#home" className="inline-block font-heading text-2xl font-semibold">
+              Abimanyu<span className="text-muted-foreground">.</span>
             </Link>
-            <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed max-w-xs">
-              Crafting digital experiences with passion and precision. Building the web, one pixel at a time.
+            <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
+              Fullstack developer &amp; QA engineer. Open for freelance and collaborations.
             </p>
-            <div className="flex items-center gap-4 mt-6">
-              <SocialLink href="https://github.com/abimanyupewe" icon={<Github size={20} />} label="GitHub" />
-              <SocialLink href="https://www.linkedin.com/in/abimanyu-priyo-widagdo-101a46279/" icon={<Linkedin size={20} />} label="LinkedIn" />
-              <SocialLink href="https://www.instagram.com/hoohbim_" icon={<Instagram size={20} />} label="Instagram" />
-              <SocialLink href="mailto:abimanyupw369@gmail.com" icon={<Mail size={20} />} label="Email" />
-            </div>
+            <p className="text-xs text-muted-foreground">
+              &copy; {new Date().getFullYear()} Abimanyu. All rights reserved.
+            </p>
           </div>
 
-          {/* Navigation Column */}
-          <div className="md:pl-10">
-            <h3 className="text-sm font-semibold text-black dark:text-white uppercase tracking-wider mb-4">
-              Navigation
-            </h3>
-            <ul className="space-y-3">
-              <FooterLink href="#home">Home</FooterLink>
-              <FooterLink href="#about">About</FooterLink>
-              <FooterLink href="#project">Projects</FooterLink>
-              <FooterLink href="#experience">Experience</FooterLink>
-            </ul>
-          </div>
+          <FooterColumn title="Pages" links={pages} />
+          <FooterColumn title="Socials" links={socials} external />
 
-          {/* Contact / Info Column */}
+          {/* Contact */}
           <div>
-            <h3 className="text-sm font-semibold text-black dark:text-white uppercase tracking-wider mb-4">
-              Get in Touch
-            </h3>
-            <ul className="space-y-3 text-sm text-neutral-600 dark:text-neutral-400">
-              <li className="flex items-start gap-3">
-                <span className="font-medium text-black dark:text-white">Email:</span>
-                <a href="mailto:abimanyupw369@gmail.com" className="hover:text-black dark:hover:text-white transition-colors">
+            <h3 className="mb-4 text-sm font-semibold">Contact</h3>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li>
+                <a href="mailto:abimanyupw369@gmail.com" className="break-all transition-colors hover:text-foreground">
                   abimanyupw369@gmail.com
                 </a>
               </li>
-              <li className="flex items-start gap-3">
-                <span className="font-medium text-black dark:text-white">Location:</span>
-                <span>Indonesia</span>
-              </li>
-              <li className="mt-4">
-                <p className="text-xs text-neutral-500">
-                  Open for freelance opportunities and collaborations.
-                </p>
-              </li>
+              <li>Malang, Indonesia</li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-100 dark:border-neutral-900 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-neutral-500 dark:text-neutral-500 text-center md:text-left">
-            &copy; {new Date().getFullYear()} Abimanyu. All rights reserved.
-          </p>
-          <div className="flex items-center gap-6 text-xs text-neutral-500 dark:text-neutral-500">
-            <span>Privacy Policy</span>
-            <span>Terms of Service</span>
-          </div>
+        {/* Big pixel tagline, faded at the bottom edge like the reference */}
+        <div
+          aria-hidden
+          className="mt-16 select-none whitespace-nowrap text-center font-[family-name:var(--font-pixelify-sans)] text-[11.5vw] leading-[0.85] tracking-tight text-foreground/10 [mask-image:linear-gradient(to_bottom,black_40%,transparent)] md:text-[10.5vw] xl:text-[9.5rem]"
+        >
+          Code. Test. Ship.
         </div>
       </div>
     </footer>
   );
 };
 
-// Helper Components for cleaner code
-const FooterLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <li>
-    <Link
-      href={href}
-      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors duration-200"
-    >
-      {children}
-    </Link>
-  </li>
-);
-
-const SocialLink = ({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) => (
-  <a
-    href={href}
-    aria-label={label}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="text-neutral-400 hover:text-black dark:hover:text-white transition-colors duration-200 transform hover:scale-110"
-  >
-    {icon}
-  </a>
+const FooterColumn = ({
+  title,
+  links,
+  external,
+}: {
+  title: string;
+  links: { label: string; href: string }[];
+  external?: boolean;
+}) => (
+  <div>
+    <h3 className="mb-4 text-sm font-semibold">{title}</h3>
+    <ul className="space-y-3">
+      {links.map((l) => (
+        <li key={l.label}>
+          <Link
+            href={l.href}
+            {...(external && !l.href.startsWith("mailto:") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {l.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </div>
 );
 
 export default Footer;

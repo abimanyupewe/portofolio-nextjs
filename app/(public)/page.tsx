@@ -6,6 +6,8 @@ import { CounterSection } from "@/app/components/home/props/CounterSection";
 import Project from "@/app/components/home/Project";
 import ExperienceSection from "@/app/components/home/ExperienceSection";
 import AboutSection from "@/app/components/home/AboutSection";
+import PlaygroundNote from "@/app/components/home/PlaygroundNote";
+import { getNotes } from "@/app/actions/notes";
 import connectToDatabase from "@/lib/mongodb";
 import ProjectModel from "@/models/Project";
 import ProfileModel from "@/models/Profile";
@@ -39,12 +41,13 @@ export default async function Home() {
   await connectToDatabase();
 
   // Fetch all data from MongoDB in parallel
-  const [projectsRaw, profileRaw, experiencesRaw, certificatesRaw, skillsRaw] = await Promise.all([
+  const [projectsRaw, profileRaw, experiencesRaw, certificatesRaw, skillsRaw, notes] = await Promise.all([
     ProjectModel.find({}).sort({ created_at: -1 }).lean(),
     ProfileModel.findOne().lean(),
     ExperienceModel.find({}).sort({ created_at: -1 }).lean(),
     CertificateModel.find({}).sort({ date: -1 }).lean(),
-    SkillModel.find({ icon_url: { $ne: null } }).lean()
+    SkillModel.find({ icon_url: { $ne: null } }).lean(),
+    getNotes()
   ]);
 
   const projects = serialize(projectsRaw);
@@ -68,6 +71,7 @@ export default async function Home() {
       {/* Pass data to Project component */}
       <Project initialProjects={projects || []} />
       <ExperienceSection experiences={experiences || []} />
+      <PlaygroundNote initialNotes={notes} />
       {/* <SertificateSection certificates={certificates || []} /> */}
     </div>
   );
